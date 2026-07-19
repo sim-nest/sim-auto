@@ -1,0 +1,16 @@
+[workspace]
+resolver = "3"
+members = [
+  "crates/sim-lib-auto-core",
+  "recipes/auto-core-citizens",
+  "xtask",
+]
+
+[workspace.package]
+edition = "2024"
+license = "MPL-2.0"
+repository = "https://github.com/sim-nest/sim-auto"
+homepage = "https://github.com/sim-nest/sim-auto"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"

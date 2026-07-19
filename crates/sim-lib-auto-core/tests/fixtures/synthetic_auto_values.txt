@@ -1,0 +1,7 @@
+# Synthetic automotive fixture values.
+vehicle = "vehicle-alpha"
+namespace = "fixture"
+plate = "plate-fixture-alpha"
+session = "cookie-fixture-alpha"
+vendor = "token-fixture-alpha"
+transport = "fixture-transport"

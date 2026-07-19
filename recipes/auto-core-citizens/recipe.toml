@@ -1,0 +1,8 @@
+id = "auto-core-citizens"
+title = "Auto core citizens"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 10
+tags = ["auto", "citizen", "manifest"]
+requires = ["sim-lib-auto-core", "sim-citizen", "sim-kernel"]

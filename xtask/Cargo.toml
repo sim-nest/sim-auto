@@ -1,0 +1,10 @@
+[package]
+name = "xtask"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Repository automation for sim-auto."
+publish = false
+
+[lints]
+workspace = true

@@ -4,15 +4,17 @@ use sim_citizen::check_fixture;
 use sim_kernel::{Cx, DefaultFactory, Expr, Lib, NoopEvalPolicy, Symbol};
 
 use sim_lib_auto_core::{
-    AUTO_DIAGNOSTICS_READ, AutoCoreLib, AutoLane, BrandCaps, Dtc, EffectClass, OpCap, SiteManifest,
-    TransportSpec, VehicleId, auto_capability_names, auto_caps_symbol, auto_citizen_registry,
-    auto_citizen_symbols, auto_lanes_symbol, control_effect, diagnostic_effect, diagnostic_lane,
-    install_auto_core_lib, manifest_shape_symbol, telemetry_lane, vehicle_read_construct,
+    AUTO_DIAGNOSTICS_READ, AutoCoreLib, AutoLane, BrandCaps, Dtc, DtcStatus, EffectClass, OpCap,
+    SiteManifest, TransportSpec, VehicleId, auto_capability_names, auto_caps_symbol,
+    auto_citizen_registry, auto_citizen_symbols, auto_lanes_symbol, control_effect,
+    diagnostic_effect, diagnostic_lane, install_auto_core_lib, manifest_shape_symbol,
+    telemetry_lane, vehicle_read_construct,
 };
 
 const EXPECTED_CITIZENS: &[&str] = &[
     "auto/VehicleId",
     "auto/Dtc",
+    "auto/DtcStatus",
     "auto/BrandCaps",
     "auto/AutoLane",
     "auto/EffectClass",
@@ -28,7 +30,17 @@ fn core_citizens_round_trip() {
     assert_expected_citizens_registered();
 
     check_fixture(&mut cx, VehicleId::new("fixture", "vehicle-alpha")).unwrap();
-    check_fixture(&mut cx, Dtc::new("body", "B0000", "modeled diagnostic")).unwrap();
+    check_fixture(
+        &mut cx,
+        Dtc::with_status(
+            "body",
+            "B0000",
+            "modeled diagnostic",
+            DtcStatus::from_byte(0x89),
+        ),
+    )
+    .unwrap();
+    check_fixture(&mut cx, DtcStatus::from_byte(0x89)).unwrap();
     check_fixture(
         &mut cx,
         BrandCaps::new("fixture-brand", auto_capability_names()),

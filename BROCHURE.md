@@ -4,12 +4,12 @@ In one line: a safe automotive domain layer for describing vehicles, service lan
 
 ## What it gives you
 
-Automotive work needs names for vehicles, diagnostic lanes, service operations, and shop-side access without leaking private shop data into the runtime. This repository gives SIM a shared vocabulary for those pieces, with synthetic fixture discipline baked into the tests.
+Automotive work needs names for vehicles, diagnostic lanes, byte-level fault frames, service operations, and shop-side access without leaking private shop data into the runtime. This repository gives SIM a shared vocabulary for those pieces, with synthetic fixture discipline baked into the tests.
 
 ## Why you will be glad
 
 - Vehicle-facing experiments can use a common language instead of ad hoc labels.
-- Shop capabilities stay explicit, so access and effects are easy to review.
+- Diagnostic frames become inspectable records while shop capabilities stay explicit, so access and effects are easy to review.
 - Fixture checks catch accidental private-looking automotive values before they leave the tree.
 
 ## Where it fits

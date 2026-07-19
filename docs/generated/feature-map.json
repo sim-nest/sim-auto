@@ -9,6 +9,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "sim-codec-uds"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-lib-auto-core"
     },
     {

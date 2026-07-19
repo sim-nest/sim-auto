@@ -1,0 +1,5 @@
+book = "codec/uds"
+title = "UDS Codec"
+summary = "Automotive diagnostic byte frames as SIM records."
+order = 10
+chapters = ["01-basics"]

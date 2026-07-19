@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
 members = [
+  "crates/sim-codec-uds",
   "crates/sim-lib-auto-core",
   "recipes/auto-core-citizens",
   "xtask",

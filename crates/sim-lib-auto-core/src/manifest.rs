@@ -44,6 +44,9 @@ pub struct Dtc {
     pub code: String,
     /// Human-facing description for the modeled code.
     pub description: String,
+    /// Standardized diagnostic status bits supplied by the transport.
+    #[citizen(with = "dtc_status_field")]
+    pub status: DtcStatus,
 }
 
 impl Default for Dtc {
@@ -59,11 +62,146 @@ impl Dtc {
         code: impl Into<String>,
         description: impl Into<String>,
     ) -> Self {
+        Self::with_status(system, code, description, DtcStatus::default())
+    }
+
+    /// Builds a diagnostic trouble code descriptor with explicit status bits.
+    pub fn with_status(
+        system: impl Into<String>,
+        code: impl Into<String>,
+        description: impl Into<String>,
+        status: DtcStatus,
+    ) -> Self {
         Self {
             system: system.into(),
             code: code.into(),
             description: description.into(),
+            status,
         }
+    }
+}
+
+/// Standard UDS diagnostic status bits for a trouble code.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Citizen)]
+#[citizen(symbol = "auto/DtcStatus", version = 0)]
+pub struct DtcStatus {
+    /// The DTC test is failed now.
+    pub test_failed: bool,
+    /// The DTC test failed during the current operation cycle.
+    pub test_failed_this_operation_cycle: bool,
+    /// The DTC is pending confirmation.
+    pub pending: bool,
+    /// The DTC is confirmed.
+    pub confirmed: bool,
+    /// The DTC has not completed since the last clear operation.
+    pub test_not_completed_since_clear: bool,
+    /// The DTC failed at least once since the last clear operation.
+    pub test_failed_since_clear: bool,
+    /// The DTC test has not completed in the current operation cycle.
+    pub test_not_completed_this_operation_cycle: bool,
+    /// The warning indicator is requested.
+    pub warning_indicator: bool,
+}
+
+impl DtcStatus {
+    /// Decodes a UDS DTC status byte.
+    pub fn from_byte(byte: u8) -> Self {
+        Self {
+            test_failed: byte & 0x01 != 0,
+            test_failed_this_operation_cycle: byte & 0x02 != 0,
+            pending: byte & 0x04 != 0,
+            confirmed: byte & 0x08 != 0,
+            test_not_completed_since_clear: byte & 0x10 != 0,
+            test_failed_since_clear: byte & 0x20 != 0,
+            test_not_completed_this_operation_cycle: byte & 0x40 != 0,
+            warning_indicator: byte & 0x80 != 0,
+        }
+    }
+
+    /// Encodes the status bits back to a UDS status byte.
+    pub fn to_byte(self) -> u8 {
+        u8::from(self.test_failed)
+            | (u8::from(self.test_failed_this_operation_cycle) << 1)
+            | (u8::from(self.pending) << 2)
+            | (u8::from(self.confirmed) << 3)
+            | (u8::from(self.test_not_completed_since_clear) << 4)
+            | (u8::from(self.test_failed_since_clear) << 5)
+            | (u8::from(self.test_not_completed_this_operation_cycle) << 6)
+            | (u8::from(self.warning_indicator) << 7)
+    }
+}
+
+mod dtc_status_field {
+    use sim_kernel::{Error, Expr, Result, Symbol};
+
+    use super::DtcStatus;
+
+    pub fn encode(status: &DtcStatus) -> Expr {
+        Expr::Map(vec![
+            field("test_failed", status.test_failed),
+            field(
+                "test_failed_this_operation_cycle",
+                status.test_failed_this_operation_cycle,
+            ),
+            field("pending", status.pending),
+            field("confirmed", status.confirmed),
+            field(
+                "test_not_completed_since_clear",
+                status.test_not_completed_since_clear,
+            ),
+            field("test_failed_since_clear", status.test_failed_since_clear),
+            field(
+                "test_not_completed_this_operation_cycle",
+                status.test_not_completed_this_operation_cycle,
+            ),
+            field("warning_indicator", status.warning_indicator),
+        ])
+    }
+
+    pub fn decode(expr: &Expr) -> Result<DtcStatus> {
+        let Expr::Map(entries) = expr else {
+            return Err(Error::Eval(
+                "DTC status citizen field must be a map".to_owned(),
+            ));
+        };
+        Ok(DtcStatus {
+            test_failed: bool_field(entries, "test_failed")?,
+            test_failed_this_operation_cycle: bool_field(
+                entries,
+                "test_failed_this_operation_cycle",
+            )?,
+            pending: bool_field(entries, "pending")?,
+            confirmed: bool_field(entries, "confirmed")?,
+            test_not_completed_since_clear: bool_field(entries, "test_not_completed_since_clear")?,
+            test_failed_since_clear: bool_field(entries, "test_failed_since_clear")?,
+            test_not_completed_this_operation_cycle: bool_field(
+                entries,
+                "test_not_completed_this_operation_cycle",
+            )?,
+            warning_indicator: bool_field(entries, "warning_indicator")?,
+        })
+    }
+
+    fn field(name: &str, value: bool) -> (Expr, Expr) {
+        (Expr::Symbol(Symbol::new(name)), Expr::Bool(value))
+    }
+
+    fn bool_field(entries: &[(Expr, Expr)], name: &'static str) -> Result<bool> {
+        entries
+            .iter()
+            .find_map(|(key, value)| {
+                if key == &Expr::Symbol(Symbol::new(name)) {
+                    match value {
+                        Expr::Bool(value) => Some(Ok(*value)),
+                        _ => Some(Err(Error::Eval(format!(
+                            "DTC status field {name} must be bool"
+                        )))),
+                    }
+                } else {
+                    None
+                }
+            })
+            .unwrap_or_else(|| Err(Error::Eval(format!("missing DTC status field {name}"))))
     }
 }
 
@@ -289,7 +427,12 @@ fn vehicle_id_example() -> VehicleId {
 }
 
 fn dtc_example() -> Dtc {
-    Dtc::new("body", "B0000", "modeled diagnostic")
+    Dtc::with_status(
+        "body",
+        "B0000",
+        "modeled diagnostic",
+        DtcStatus::from_byte(0x08),
+    )
 }
 
 fn brand_caps_example() -> BrandCaps {

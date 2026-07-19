@@ -19,8 +19,9 @@ pub use capability::{
     AUTO_TELEMETRY_READ, AUTO_TRANSPORT_CONNECT, auto_capability_names, auto_capability_texts,
 };
 pub use manifest::{
-    AutoLane, BrandCaps, Dtc, EffectClass, OpCap, SiteManifest, TransportSpec, VehicleId,
-    auto_lane, control_effect, diagnostic_effect, diagnostic_lane, manifest_lane, telemetry_lane,
+    AutoLane, BrandCaps, Dtc, DtcStatus, EffectClass, OpCap, SiteManifest, TransportSpec,
+    VehicleId, auto_lane, control_effect, diagnostic_effect, diagnostic_lane, manifest_lane,
+    telemetry_lane,
 };
 pub use read_construct::{read_construct_expr, text_read_construct_expr, vehicle_read_construct};
 pub use runtime::{

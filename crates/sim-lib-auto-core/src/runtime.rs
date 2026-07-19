@@ -10,6 +10,7 @@ use crate::auto_capability_texts;
 const AUTO_CITIZENS: &[&str] = &[
     "auto/VehicleId",
     "auto/Dtc",
+    "auto/DtcStatus",
     "auto/BrandCaps",
     "auto/AutoLane",
     "auto/EffectClass",

@@ -9,6 +9,13 @@
       "summary": "Runnable recipe for sim-auto core citizens."
     },
     {
+      "crate_name": "sim_codec_uds",
+      "group": "workspace",
+      "manifest": "crates/sim-codec-uds/Cargo.toml",
+      "package": "sim-codec-uds",
+      "summary": "UDS and OBD-II byte-frame codec for SIM automotive diagnostics."
+    },
+    {
       "crate_name": "sim_lib_auto_core",
       "group": "workspace",
       "manifest": "crates/sim-lib-auto-core/Cargo.toml",

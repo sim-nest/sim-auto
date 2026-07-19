@@ -23,6 +23,13 @@
       "summary": "Automotive domain citizens, capability names, and loadable runtime exports."
     },
     {
+      "crate_name": "sim_lib_auto_diag",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-diag/Cargo.toml",
+      "package": "sim-lib-auto-diag",
+      "summary": "Modeled automotive diagnostic fabric."
+    },
+    {
       "crate_name": "xtask",
       "group": "workspace",
       "manifest": "xtask/Cargo.toml",

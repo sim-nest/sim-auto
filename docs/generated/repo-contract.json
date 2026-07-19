@@ -1,11 +1,17 @@
 {
-  "card_count": 3,
+  "card_count": 4,
   "cards": [
     {
       "id": "browse/catalog",
       "kind": "browse-root",
       "owner": "workspace",
       "summary": "root browse catalog"
+    },
+    {
+      "id": "cookbook/auto/diag",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-auto-diag",
+      "summary": "Modeled automotive diagnostic sessions as replayable SIM fabric."
     },
     {
       "id": "cookbook/codec/uds",
@@ -32,12 +38,22 @@
       "auto-core-citizens",
       "sim-codec-uds",
       "sim-lib-auto-core",
+      "sim-lib-auto-diag",
       "xtask"
     ]
   },
-  "non_citizen_exemption_count": 0,
-  "non_citizen_exemptions": [],
-  "package_count": 4,
+  "non_citizen_exemption_count": 1,
+  "non_citizen_exemptions": [
+    {
+      "crate": "sim-lib-auto-diag",
+      "descriptor": "auto/AutoSession",
+      "file": "crates/sim-lib-auto-diag/src/fabric.rs",
+      "kind": "handle",
+      "line": 24,
+      "reason": "live diagnostic eval-fabric handle; reconstruct from auto/AutoSession descriptor data"
+    }
+  ],
+  "package_count": 5,
   "packages": [
     {
       "crate_name": "auto-core-citizens",
@@ -169,6 +185,59 @@
       ]
     },
     {
+      "crate_name": "sim_lib_auto_diag",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-codec-uds",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-auto-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Modeled automotive diagnostic fabric for SIM.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-diag/Cargo.toml",
+      "name": "sim-lib-auto-diag",
+      "publish": "true",
+      "root": "crates/sim-lib-auto-diag",
+      "rustdoc_summary": "Modeled automotive diagnostic fabric.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_auto_diag",
+          "src": "crates/sim-lib-auto-diag/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-auto-diag/build.rs"
+        }
+      ]
+    },
+    {
       "crate_name": "xtask",
       "dependencies": [],
       "description": "Repository automation for sim-auto.",
@@ -201,10 +270,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-19T21:53:10+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "e45edee0b2496b47bf388dea9a4f874b9bc19178",
+    "git_commit": "9922fb859d2dee5cd8aa5592fe2db9a359b62972",
     "repo": "sim-auto",
     "schema": "sim.provenance.v1",
-    "source_commit": "e45edee0b2496b47bf388dea9a4f874b9bc19178",
+    "source_commit": "9922fb859d2dee5cd8aa5592fe2db9a359b62972",
     "source_remote": "https://github.com/sim-nest/sim-auto",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -217,9 +286,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "04039461678a0f80",
+    "workspace_hash": "22286034f4dc3801",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 21,
+    "workspace_hash_input_count": 31,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-codec-uds/Cargo.toml",
@@ -237,14 +306,24 @@
       "crates/sim-lib-auto-core/src/manifest.rs",
       "crates/sim-lib-auto-core/src/read_construct.rs",
       "crates/sim-lib-auto-core/src/runtime.rs",
+      "crates/sim-lib-auto-core/src/session.rs",
       "crates/sim-lib-auto-core/tests/audit_patterns.rs",
       "crates/sim-lib-auto-core/tests/citizen_roundtrip.rs",
+      "crates/sim-lib-auto-diag/Cargo.toml",
+      "crates/sim-lib-auto-diag/build.rs",
+      "crates/sim-lib-auto-diag/recipes/book.toml",
+      "crates/sim-lib-auto-diag/src/fabric.rs",
+      "crates/sim-lib-auto-diag/src/lib.rs",
+      "crates/sim-lib-auto-diag/src/model.rs",
+      "crates/sim-lib-auto-diag/src/request.rs",
+      "crates/sim-lib-auto-diag/src/runtime.rs",
+      "crates/sim-lib-auto-diag/src/tests.rs",
       "recipes/auto-core-citizens/Cargo.toml",
       "recipes/auto-core-citizens/recipe.toml",
       "xtask/Cargo.toml"
     ]
   },
-  "recipe_book_count": 1,
+  "recipe_book_count": 2,
   "recipes": [
     {
       "book": "codec/uds",
@@ -256,6 +335,17 @@
       "recipes": [],
       "summary": "Automotive diagnostic byte frames as SIM records.",
       "title": "UDS Codec"
+    },
+    {
+      "book": "auto/diag",
+      "book_toml": "crates/sim-lib-auto-diag/recipes/book.toml",
+      "card_id": "cookbook/auto/diag",
+      "group": "workspace",
+      "package": "sim-lib-auto-diag",
+      "recipe_count": 0,
+      "recipes": [],
+      "summary": "Modeled automotive diagnostic sessions as replayable SIM fabric.",
+      "title": "Auto Diagnostic Fabric"
     }
   ]
 }

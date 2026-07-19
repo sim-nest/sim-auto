@@ -4,7 +4,7 @@ In one line: the automotive vocabulary SIM uses to name vehicles, shop lanes, ef
 
 ## What it gives you
 
-It gives automotive work a shared set of names for modeled vehicles, diagnostics, status bits, service channels, shop capabilities, and transport endpoints. That shared vocabulary makes experiments easier to compare and easier to review because every piece describes the same kind of thing in the same way.
+It gives automotive work a shared set of names for modeled vehicles, diagnostics, status bits, service channels, shop capabilities, transport endpoints, and diagnostic sessions. That shared vocabulary makes experiments easier to compare and easier to review because every piece describes the same kind of thing in the same way.
 
 ## Why you will be glad
 

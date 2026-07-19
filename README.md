@@ -6,6 +6,8 @@ a loadable manifest library that other SIM crates can register without adding
 automotive policy to the kernel.
 The UDS codec crate turns diagnostic bytes into these same open records without
 shipping vendor fault text or captured shop traces.
+The diagnostic fabric crate serves modeled ECU sites through the kernel fabric
+contract and records replayable synthetic diagnostic replies.
 
 The repository keeps vehicle identities modeled and synthetic by default. Tests
 guard committed fixtures against values shaped like VINs, Swedish plates, dealer
@@ -16,6 +18,8 @@ cookies, and vendor tokens.
 - `sim-lib-auto-core`: automotive citizens, capability names, site manifests,
   transport descriptors, and loadable runtime exports.
 - `sim-codec-uds`: UDS and OBD-II byte-frame codec with DTC status-bit decode.
+- `sim-lib-auto-diag`: modeled diagnostic sites, session placement, and
+  cassette-backed replay for synthetic ECU reads.
 
 ## Validation
 

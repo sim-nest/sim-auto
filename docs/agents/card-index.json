@@ -3,6 +3,8 @@
   "cards": [
     "crates/sim-codec-uds/recipes/01-basics/chapter.toml",
     "crates/sim-codec-uds/recipes/book.toml",
+    "crates/sim-lib-auto-diag/recipes/01-basics/chapter.toml",
+    "crates/sim-lib-auto-diag/recipes/book.toml",
     "recipes/auto-core-citizens/Cargo.toml",
     "recipes/auto-core-citizens/README.md",
     "recipes/auto-core-citizens/recipe.toml",

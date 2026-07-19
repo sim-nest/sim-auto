@@ -13,6 +13,7 @@ mod capability;
 pub mod manifest;
 mod read_construct;
 mod runtime;
+pub mod session;
 
 pub use capability::{
     AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_MANIFEST_READ, AUTO_SERVICE_WRITE,
@@ -28,3 +29,4 @@ pub use runtime::{
     AutoCoreLib, auto_caps_symbol, auto_citizen_registry, auto_citizen_symbols, auto_lanes_symbol,
     install_auto_core_lib, manifest_shape_symbol,
 };
+pub use session::{AutoSession, TransportPlacement};

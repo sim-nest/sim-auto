@@ -1,0 +1,5 @@
+book = "auto/diag"
+title = "Auto Diagnostic Fabric"
+summary = "Modeled automotive diagnostic sessions as replayable SIM fabric."
+order = 20
+chapters = ["01-basics"]

@@ -3,6 +3,7 @@ resolver = "3"
 members = [
   "crates/sim-codec-uds",
   "crates/sim-lib-auto-core",
+  "crates/sim-lib-auto-diag",
   "recipes/auto-core-citizens",
   "xtask",
 ]

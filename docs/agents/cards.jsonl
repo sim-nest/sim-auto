@@ -1,5 +1,7 @@
 {"kind":"recipe","path":"crates/sim-codec-uds/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-codec-uds/recipes/book.toml"}
+{"kind":"recipe","path":"crates/sim-lib-auto-diag/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-auto-diag/recipes/book.toml"}
 {"kind":"recipe","path":"recipes/auto-core-citizens/Cargo.toml"}
 {"kind":"recipe","path":"recipes/auto-core-citizens/README.md"}
 {"kind":"recipe","path":"recipes/auto-core-citizens/recipe.toml"}

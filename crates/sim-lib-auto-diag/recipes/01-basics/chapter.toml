@@ -1,0 +1,3 @@
+title = "Basics"
+order = 10
+summary = "Read synthetic DTC and PID data through a modeled diagnostic session."

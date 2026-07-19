@@ -1,0 +1,26 @@
+{
+  "generator": "xtask repo-contract v1",
+  "packages": [
+    {
+      "crate_name": "auto-core-citizens",
+      "group": "workspace",
+      "manifest": "recipes/auto-core-citizens/Cargo.toml",
+      "package": "auto-core-citizens",
+      "summary": "Runnable recipe for sim-auto core citizens."
+    },
+    {
+      "crate_name": "sim_lib_auto_core",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-core/Cargo.toml",
+      "package": "sim-lib-auto-core",
+      "summary": "Automotive domain citizens, capability names, and loadable runtime exports."
+    },
+    {
+      "crate_name": "xtask",
+      "group": "workspace",
+      "manifest": "xtask/Cargo.toml",
+      "package": "xtask",
+      "summary": "Repository automation for sim-auto."
+    }
+  ]
+}

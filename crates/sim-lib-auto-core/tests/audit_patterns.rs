@@ -4,12 +4,8 @@ use regex::Regex;
 
 #[test]
 fn no_committed_value_matches_real_pii_shape() {
-    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .ancestors()
-        .nth(2)
-        .expect("crate lives under crates/sim-lib-auto-core");
     let hits = scan_fixture_tree_for_patterns(
-        &repo_root.join("crates/sim-lib-auto-core/tests/fixtures"),
+        &Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures"),
         &pii_patterns(),
     );
     assert!(hits.is_empty(), "committed PII/secret shapes: {hits:?}");

@@ -16,5 +16,22 @@ Generated from Cargo metadata by `xtask crate-catalog v1`.
 | `sim-lib-auto-vehicle` | `true` | `lib` | Modeled vehicle identity lookup and automotive data-source bridge contracts for SIM. |
 | `sim-lib-auto-vendor` | `true` | `lib` | Manifest-driven automotive vendor site engine for SIM. |
 | `sim-lib-view-bay` | `true` | `lib` | Automotive bay Scene and Intent surface for SIM. |
+| `auto-modeled-work-order` | `false` | `bin` | Runnable modeled work-order recipe for sim-auto. |
+| `auto-lane-flash` | `false` | `bin` | Runnable modeled flash lane recipe for sim-auto. |
+| `auto-lane-info` | `false` | `bin` | Runnable modeled information lane recipe for sim-auto. |
+| `auto-lane-order` | `false` | `bin` | Runnable modeled supplier-order lane recipe for sim-auto. |
+| `auto-lane-parts` | `false` | `bin` | Runnable modeled parts lane recipe for sim-auto. |
+| `auto-lane-read` | `false` | `bin` | Runnable modeled read lane recipe for sim-auto. |
+| `auto-lane-service` | `false` | `bin` | Runnable modeled service lane recipe for sim-auto. |
+| `auto-site-autotuner` | `false` | `bin` | Runnable modeled Autotuner site recipe for sim-auto. |
+| `auto-site-biluppgifter-se` | `false` | `bin` | Runnable modeled biluppgifter.se site recipe for sim-auto. |
+| `auto-site-esitronic` | `false` | `bin` | Runnable modeled ESItronic site recipe for sim-auto. |
+| `auto-site-haynespro` | `false` | `bin` | Runnable modeled HaynesPro site recipe for sim-auto. |
+| `auto-site-ista` | `false` | `bin` | Runnable modeled ISTA site recipe for sim-auto. |
+| `auto-site-mekonomen-pro` | `false` | `bin` | Runnable modeled Mekonomen Pro site recipe for sim-auto. |
+| `auto-site-odis` | `false` | `bin` | Runnable modeled ODIS site recipe for sim-auto. |
+| `auto-site-vida` | `false` | `bin` | Runnable modeled VIDA site recipe for sim-auto. |
+| `auto-site-xentry` | `false` | `bin` | Runnable modeled XENTRY site recipe for sim-auto. |
 | `auto-core-citizens` | `false` | `bin` | Runnable recipe for sim-auto core citizens. |
+| `auto-recipe-support` | `false` | `lib` | Shared support for runnable sim-auto recipes. |
 | `xtask` | `false` | `bin` | Repository automation for sim-auto. |

@@ -71,5 +71,6 @@
 {"kind":"recipe","path":"recipes/auto-core-citizens/recipe.toml"}
 {"kind":"recipe","path":"recipes/auto-core-citizens/src/main.rs"}
 {"kind":"recipe","path":"recipes/auto-recipe-support/Cargo.toml"}
+{"kind":"recipe","path":"recipes/auto-recipe-support/README.md"}
 {"kind":"recipe","path":"recipes/auto-recipe-support/src/lib.rs"}
 {"kind":"recipe","path":"recipes/book.toml"}

@@ -16,7 +16,7 @@ mod runtime;
 pub mod session;
 
 pub use capability::{
-    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_MANIFEST_READ, AUTO_SERVICE_WRITE,
+    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_MANIFEST_READ, AUTO_ORDER, AUTO_SERVICE_WRITE,
     AUTO_TELEMETRY_READ, AUTO_TRANSPORT_CONNECT, auto_capability_names, auto_capability_texts,
 };
 pub use manifest::{

@@ -40,12 +40,13 @@
       "sim-lib-auto-core",
       "sim-lib-auto-diag",
       "sim-lib-auto-info",
+      "sim-lib-auto-parts",
       "sim-lib-auto-vehicle",
       "sim-lib-auto-vendor",
       "xtask"
     ]
   },
-  "non_citizen_exemption_count": 2,
+  "non_citizen_exemption_count": 4,
   "non_citizen_exemptions": [
     {
       "crate": "sim-lib-auto-diag",
@@ -56,6 +57,22 @@
       "reason": "live diagnostic eval-fabric handle; reconstruct from auto/AutoSession descriptor data"
     },
     {
+      "crate": "sim-lib-auto-parts",
+      "descriptor": "auto/PartLine",
+      "file": "crates/sim-lib-auto-parts/src/catalog.rs",
+      "kind": "handle",
+      "line": 18,
+      "reason": "modeled catalog handle; canonical values are auto/PartLine leaves"
+    },
+    {
+      "crate": "sim-lib-auto-parts",
+      "descriptor": "auto/PartLine",
+      "file": "crates/sim-lib-auto-parts/src/fabric.rs",
+      "kind": "handle",
+      "line": 17,
+      "reason": "modeled parts eval-fabric handle; reconstruct from auto parts fixture data"
+    },
+    {
       "crate": "sim-lib-auto-vendor",
       "descriptor": "auto/SiteManifest",
       "file": "crates/sim-lib-auto-vendor/src/engine.rs",
@@ -64,7 +81,7 @@
       "reason": "live vendor eval-fabric handle; reconstruct from auto/SiteManifest descriptor data"
     }
   ],
-  "package_count": 8,
+  "package_count": 9,
   "packages": [
     {
       "crate_name": "auto-core-citizens",
@@ -284,6 +301,48 @@
       ]
     },
     {
+      "crate_name": "sim_lib_auto_parts",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-auto-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-auto-vendor",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Modeled automotive parts catalog lookup and supplier ordering for SIM.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-parts/Cargo.toml",
+      "name": "sim-lib-auto-parts",
+      "publish": "true",
+      "root": "crates/sim-lib-auto-parts",
+      "rustdoc_summary": "Modeled automotive parts lookup and supplier ordering.",
+      "target_kinds": [
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_auto_parts",
+          "src": "crates/sim-lib-auto-parts/src/lib.rs"
+        }
+      ]
+    },
+    {
       "crate_name": "sim_lib_auto_vehicle",
       "dependencies": [
         {
@@ -386,10 +445,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-19T21:53:10+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "891ce4ebad00ef41c4bb25b7b999cf08b8d2a724",
+    "git_commit": "7ea79a18facb9070f600d158473097b7a23163c8",
     "repo": "sim-auto",
     "schema": "sim.provenance.v1",
-    "source_commit": "891ce4ebad00ef41c4bb25b7b999cf08b8d2a724",
+    "source_commit": "7ea79a18facb9070f600d158473097b7a23163c8",
     "source_remote": "https://github.com/sim-nest/sim-auto",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -402,9 +461,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "c21097b2979cec0b",
+    "workspace_hash": "72b2b43e4732e7cb",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 59,
+    "workspace_hash_input_count": 68,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-codec-uds/Cargo.toml",
@@ -444,6 +503,15 @@
       "crates/sim-lib-auto-info/src/request.rs",
       "crates/sim-lib-auto-info/src/runtime.rs",
       "crates/sim-lib-auto-info/src/tests.rs",
+      "crates/sim-lib-auto-parts/Cargo.toml",
+      "crates/sim-lib-auto-parts/src/catalog.rs",
+      "crates/sim-lib-auto-parts/src/fabric.rs",
+      "crates/sim-lib-auto-parts/src/lib.rs",
+      "crates/sim-lib-auto-parts/src/model.rs",
+      "crates/sim-lib-auto-parts/src/order.rs",
+      "crates/sim-lib-auto-parts/src/request.rs",
+      "crates/sim-lib-auto-parts/src/runtime.rs",
+      "crates/sim-lib-auto-parts/src/tests.rs",
       "crates/sim-lib-auto-vehicle/Cargo.toml",
       "crates/sim-lib-auto-vehicle/src/bridge.rs",
       "crates/sim-lib-auto-vehicle/src/contract.rs",

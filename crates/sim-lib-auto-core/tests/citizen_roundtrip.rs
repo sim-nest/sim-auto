@@ -1,14 +1,14 @@
 use std::sync::Arc;
 
 use sim_citizen::check_fixture;
-use sim_kernel::{Cx, DefaultFactory, Expr, Lib, NoopEvalPolicy, Symbol};
+use sim_kernel::{CapabilityName, Cx, DefaultFactory, Expr, Lib, NoopEvalPolicy, Symbol};
 
 use sim_lib_auto_core::{
-    AUTO_DIAGNOSTICS_READ, AutoCoreLib, AutoLane, BrandCaps, Dtc, DtcStatus, EffectClass, OpCap,
-    SiteManifest, TransportSpec, VehicleId, auto_capability_names, auto_caps_symbol,
-    auto_citizen_registry, auto_citizen_symbols, auto_lanes_symbol, control_effect,
-    diagnostic_effect, diagnostic_lane, install_auto_core_lib, manifest_shape_symbol,
-    telemetry_lane, vehicle_read_construct,
+    AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, AUTO_TRANSPORT_CONNECT, AutoCoreLib,
+    AutoLane, BrandCaps, Dtc, DtcStatus, EffectClass, OpCap, SiteManifest, TransportSpec,
+    VehicleId, auto_capability_names, auto_caps_symbol, auto_citizen_registry,
+    auto_citizen_symbols, auto_lanes_symbol, control_effect, diagnostic_effect, diagnostic_lane,
+    install_auto_core_lib, manifest_shape_symbol, telemetry_lane, vehicle_read_construct,
 };
 
 const EXPECTED_CITIZENS: &[&str] = &[
@@ -55,7 +55,7 @@ fn core_citizens_round_trip() {
         &mut cx,
         OpCap::new(
             "diagnostics/read-dtc",
-            auto_capability_names().remove(0),
+            CapabilityName::new(AUTO_DIAGNOSTICS_READ),
             "diagnostic-read",
         ),
     )
@@ -66,8 +66,8 @@ fn core_citizens_round_trip() {
             "fixture-transport",
             "modeled-bus",
             telemetry_lane().name,
-            auto_capability_names().remove(5),
-            auto_capability_names().remove(3),
+            CapabilityName::new(AUTO_TRANSPORT_CONNECT),
+            CapabilityName::new(AUTO_SERVICE_WRITE),
         ),
     )
     .unwrap();
@@ -119,6 +119,7 @@ fn core_lib_exports_values_and_classes() {
         panic!("expected capability list expression");
     };
     assert!(items.contains(&Expr::String(AUTO_DIAGNOSTICS_READ.to_owned())));
+    assert!(items.contains(&Expr::String(AUTO_ORDER.to_owned())));
 }
 
 #[test]

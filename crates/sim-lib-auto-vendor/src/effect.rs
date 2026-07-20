@@ -2,7 +2,8 @@
 
 use sim_kernel::{CapabilityName, Error, Result};
 use sim_lib_auto_core::{
-    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_SERVICE_WRITE, AutoLane, SiteManifest,
+    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, AutoLane,
+    SiteManifest,
 };
 
 /// Effect policy class enforced before vendor bridge dispatch.
@@ -52,7 +53,7 @@ pub fn manifest_operation(manifest: &SiteManifest, operation: &str) -> Result<Ma
     Ok(ManifestOperation {
         operation: operation.to_owned(),
         lane: lane_for(manifest, operation, effect),
-        capability: capability_for(effect),
+        capability: capability_for(operation, effect),
         effect,
     })
 }
@@ -61,16 +62,23 @@ fn classify_operation(operation: &str) -> VendorEffectClass {
     let lower = operation.to_ascii_lowercase();
     if lower.contains("read") || lower.contains("query") || lower.starts_with("brand/") {
         VendorEffectClass::Pure
-    } else if lower.contains("service") || lower.contains("write") || lower.contains("reset") {
+    } else if lower.contains("service")
+        || lower.contains("write")
+        || lower.contains("reset")
+        || lower.contains("order")
+    {
         VendorEffectClass::Reversible
     } else {
         VendorEffectClass::Irreversible
     }
 }
 
-fn capability_for(effect: VendorEffectClass) -> CapabilityName {
+fn capability_for(operation: &str, effect: VendorEffectClass) -> CapabilityName {
     let name = match effect {
         VendorEffectClass::Pure => AUTO_DIAGNOSTICS_READ,
+        VendorEffectClass::Reversible if operation.to_ascii_lowercase().contains("order") => {
+            AUTO_ORDER
+        }
         VendorEffectClass::Reversible => AUTO_SERVICE_WRITE,
         VendorEffectClass::Irreversible => AUTO_CONTROL_EXEC,
     };
@@ -78,8 +86,10 @@ fn capability_for(effect: VendorEffectClass) -> CapabilityName {
 }
 
 fn lane_for(manifest: &SiteManifest, operation: &str, effect: VendorEffectClass) -> AutoLane {
+    let lower = operation.to_ascii_lowercase();
     let preferred = match effect {
         VendorEffectClass::Pure => "diagnostics",
+        VendorEffectClass::Reversible if lower.contains("order") => "parts",
         VendorEffectClass::Reversible => "service",
         VendorEffectClass::Irreversible => "control",
     };

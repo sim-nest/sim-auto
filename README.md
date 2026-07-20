@@ -12,6 +12,8 @@ The vehicle identity crate resolves synthetic plate and VIN labels into shared
 vehicle identities while advertising host-owned data-source contracts.
 The repair information crate ranks modeled workshop procedures and projects them
 through the shared document view surface.
+The parts crate exposes modeled EPC and aftermarket catalog directories and runs
+supplier ordering through the shared reversible-effect gate.
 The vendor engine crate turns brand manifests into loadable placement sites and
 keeps vendor-facing operations behind an effect gate.
 
@@ -28,6 +30,8 @@ cookies, and vendor tokens.
   cassette-backed replay for synthetic ECU reads.
 - `sim-lib-auto-info`: modeled WIS, ISTA, VIDA, ESI[tronic], HaynesPro, and
   shop-authored repair documents ranked by vehicle, DTC, ECU, symptom, and lane.
+- `sim-lib-auto-parts`: modeled EPC and aftermarket parts directories plus
+  Mekonomen Pro-style reversible ordering with a fixture ledger.
 - `sim-lib-auto-vehicle`: modeled vehicle identity lookup by plate or VIN label,
   plus HaynesPro and biluppgifter.se bridge contracts gated by `net/http`.
 - `sim-lib-auto-vendor`: manifest-driven vendor sites and warranted dispatch for

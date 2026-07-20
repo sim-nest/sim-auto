@@ -4,7 +4,7 @@ use sim_citizen_derive::Citizen;
 use sim_kernel::CapabilityName;
 
 use crate::{
-    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_MANIFEST_READ, AUTO_SERVICE_WRITE,
+    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_MANIFEST_READ, AUTO_ORDER, AUTO_SERVICE_WRITE,
     AUTO_TELEMETRY_READ, AUTO_TRANSPORT_CONNECT,
 };
 
@@ -483,11 +483,12 @@ fn site_manifest_example() -> SiteManifest {
 }
 
 #[allow(dead_code)]
-fn capability_examples() -> [CapabilityName; 4] {
+fn capability_examples() -> [CapabilityName; 5] {
     [
         CapabilityName::new(AUTO_CONTROL_EXEC),
         CapabilityName::new(AUTO_MANIFEST_READ),
         CapabilityName::new(AUTO_SERVICE_WRITE),
+        CapabilityName::new(AUTO_ORDER),
         CapabilityName::new(AUTO_TELEMETRY_READ),
     ]
 }

@@ -5,7 +5,7 @@ use sim_kernel::{
     Value, testing::bare_cx as cx,
 };
 use sim_lib_auto_core::{
-    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_SERVICE_WRITE, SiteManifest,
+    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, SiteManifest,
 };
 
 use crate::{
@@ -217,6 +217,23 @@ fn operation_classification_fails_closed_for_unknown_ops() {
     .with_warrant(VendorWarrant::new("warrant-1", "fixture"))
     .with_human_approval(true);
     assert_eq!(request.op, "control/code");
+}
+
+#[test]
+fn order_ops_are_reversible_and_use_order_capability() {
+    let manifest = SiteManifest::new(
+        "fixture-parts",
+        "vehicle-alpha",
+        "fixture-brand",
+        vec!["parts".to_owned(), "service".to_owned()],
+        vec!["modeled".to_owned()],
+        vec!["order/place".to_owned()],
+    );
+
+    let operation = manifest_operation(&manifest, "order/place").unwrap();
+    assert_eq!(operation.effect, VendorEffectClass::Reversible);
+    assert_eq!(operation.capability.as_str(), AUTO_ORDER);
+    assert_eq!(operation.lane.name, "parts");
 }
 
 fn vendor_fabric() -> VendorSiteFabric {

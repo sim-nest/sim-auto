@@ -37,6 +37,13 @@
       "summary": "Modeled automotive repair-information documents."
     },
     {
+      "crate_name": "sim_lib_auto_parts",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-parts/Cargo.toml",
+      "package": "sim-lib-auto-parts",
+      "summary": "Modeled automotive parts lookup and supplier ordering."
+    },
+    {
       "crate_name": "sim_lib_auto_vehicle",
       "group": "workspace",
       "manifest": "crates/sim-lib-auto-vehicle/Cargo.toml",

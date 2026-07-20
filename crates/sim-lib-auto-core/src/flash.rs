@@ -28,13 +28,13 @@ impl StockMapBackup {
     /// Returns the reversal artifact required by irreversible flash writes.
     pub fn reversal_artifact(&self) -> Expr {
         Expr::Map(vec![
-            symbol_field(
+            entry(
                 "kind",
                 Expr::Symbol(Symbol::qualified("auto", "StockMapBackup")),
             ),
-            string_field("ecu", &self.ecu),
-            string_field("content-key", &self.content_key),
-            symbol_field("bytes", Expr::Bytes(self.bytes.clone())),
+            string_entry("ecu", &self.ecu),
+            string_entry("content-key", &self.content_key),
+            entry("bytes", Expr::Bytes(self.bytes.clone())),
         ])
     }
 }
@@ -119,10 +119,10 @@ pub fn stock_content_key(ecu: &str, bytes: &[u8]) -> String {
     format!("auto-stock-fnv1a64-{hash:016x}")
 }
 
-fn string_field(name: &str, value: &str) -> (Expr, Expr) {
-    symbol_field(name, Expr::String(value.to_owned()))
+fn string_entry(name: &str, value: &str) -> (Expr, Expr) {
+    entry(name, Expr::String(value.to_owned()))
 }
 
-fn symbol_field(name: &str, value: Expr) -> (Expr, Expr) {
+fn entry(name: &str, value: Expr) -> (Expr, Expr) {
     (Expr::Symbol(Symbol::new(name.to_owned())), value)
 }

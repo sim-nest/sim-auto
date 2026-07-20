@@ -30,6 +30,13 @@
       "summary": "Modeled automotive diagnostic fabric."
     },
     {
+      "crate_name": "sim_lib_auto_vendor",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-vendor/Cargo.toml",
+      "package": "sim-lib-auto-vendor",
+      "summary": "Manifest-driven automotive vendor site engine."
+    },
+    {
       "crate_name": "xtask",
       "group": "workspace",
       "manifest": "xtask/Cargo.toml",

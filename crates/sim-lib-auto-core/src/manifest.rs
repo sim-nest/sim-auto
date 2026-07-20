@@ -8,6 +8,8 @@ use crate::{
     AUTO_TELEMETRY_READ, AUTO_TRANSPORT_CONNECT,
 };
 
+mod fields;
+
 /// A modeled vehicle identity safe for committed fixtures and manifests.
 #[derive(Clone, Debug, PartialEq, Eq, Citizen)]
 #[citizen(symbol = "auto/VehicleId", version = 0)]
@@ -45,7 +47,7 @@ pub struct Dtc {
     /// Human-facing description for the modeled code.
     pub description: String,
     /// Standardized diagnostic status bits supplied by the transport.
-    #[citizen(with = "dtc_status_field")]
+    #[citizen(with = "fields::dtc_status_field")]
     pub status: DtcStatus,
 }
 
@@ -128,80 +130,6 @@ impl DtcStatus {
             | (u8::from(self.test_failed_since_clear) << 5)
             | (u8::from(self.test_not_completed_this_operation_cycle) << 6)
             | (u8::from(self.warning_indicator) << 7)
-    }
-}
-
-mod dtc_status_field {
-    use sim_kernel::{Error, Expr, Result, Symbol};
-
-    use super::DtcStatus;
-
-    pub fn encode(status: &DtcStatus) -> Expr {
-        Expr::Map(vec![
-            field("test_failed", status.test_failed),
-            field(
-                "test_failed_this_operation_cycle",
-                status.test_failed_this_operation_cycle,
-            ),
-            field("pending", status.pending),
-            field("confirmed", status.confirmed),
-            field(
-                "test_not_completed_since_clear",
-                status.test_not_completed_since_clear,
-            ),
-            field("test_failed_since_clear", status.test_failed_since_clear),
-            field(
-                "test_not_completed_this_operation_cycle",
-                status.test_not_completed_this_operation_cycle,
-            ),
-            field("warning_indicator", status.warning_indicator),
-        ])
-    }
-
-    pub fn decode(expr: &Expr) -> Result<DtcStatus> {
-        let Expr::Map(entries) = expr else {
-            return Err(Error::Eval(
-                "DTC status citizen field must be a map".to_owned(),
-            ));
-        };
-        Ok(DtcStatus {
-            test_failed: bool_field(entries, "test_failed")?,
-            test_failed_this_operation_cycle: bool_field(
-                entries,
-                "test_failed_this_operation_cycle",
-            )?,
-            pending: bool_field(entries, "pending")?,
-            confirmed: bool_field(entries, "confirmed")?,
-            test_not_completed_since_clear: bool_field(entries, "test_not_completed_since_clear")?,
-            test_failed_since_clear: bool_field(entries, "test_failed_since_clear")?,
-            test_not_completed_this_operation_cycle: bool_field(
-                entries,
-                "test_not_completed_this_operation_cycle",
-            )?,
-            warning_indicator: bool_field(entries, "warning_indicator")?,
-        })
-    }
-
-    fn field(name: &str, value: bool) -> (Expr, Expr) {
-        (Expr::Symbol(Symbol::new(name)), Expr::Bool(value))
-    }
-
-    fn bool_field(entries: &[(Expr, Expr)], name: &'static str) -> Result<bool> {
-        entries
-            .iter()
-            .find_map(|(key, value)| {
-                if key == &Expr::Symbol(Symbol::new(name)) {
-                    match value {
-                        Expr::Bool(value) => Some(Ok(*value)),
-                        _ => Some(Err(Error::Eval(format!(
-                            "DTC status field {name} must be bool"
-                        )))),
-                    }
-                } else {
-                    None
-                }
-            })
-            .unwrap_or_else(|| Err(Error::Eval(format!("missing DTC status field {name}"))))
     }
 }
 
@@ -357,12 +285,19 @@ pub struct SiteManifest {
     pub vehicle: String,
     /// Brand or workshop label.
     pub brand: String,
+    /// Vehicle makes this site covers, or `*` for a multi-brand fallback.
+    pub makes: Vec<String>,
     /// Lane names exposed by the site.
     pub lanes: Vec<String>,
     /// Transport names exposed by the site.
     pub transports: Vec<String>,
     /// Operation names exposed by the site.
     pub operations: Vec<String>,
+    /// Explicit per-operation capability and effect policy.
+    #[citizen(with = "fields::op_caps_field")]
+    pub op_caps: Vec<OpCap>,
+    /// Capability ceiling this site may ever hold.
+    pub ceiling: Vec<CapabilityName>,
 }
 
 impl Default for SiteManifest {
@@ -381,14 +316,36 @@ impl SiteManifest {
         transports: Vec<String>,
         operations: Vec<String>,
     ) -> Self {
+        let brand = brand.into();
         Self {
             site: site.into(),
             vehicle: vehicle.into(),
-            brand: brand.into(),
+            makes: vec![brand.clone()],
+            brand,
             lanes,
             transports,
             operations,
+            op_caps: Vec::new(),
+            ceiling: Vec::new(),
         }
+    }
+
+    /// Replaces the make coverage set.
+    pub fn with_makes(mut self, makes: Vec<String>) -> Self {
+        self.makes = makes;
+        self
+    }
+
+    /// Replaces the explicit operation capability policy.
+    pub fn with_op_caps(mut self, op_caps: Vec<OpCap>) -> Self {
+        self.op_caps = op_caps;
+        self
+    }
+
+    /// Replaces the site capability ceiling.
+    pub fn with_ceiling(mut self, ceiling: Vec<CapabilityName>) -> Self {
+        self.ceiling = ceiling;
+        self
     }
 }
 

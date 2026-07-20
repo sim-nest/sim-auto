@@ -5,13 +5,15 @@ use sim_kernel::{
     Value, testing::bare_cx as cx,
 };
 use sim_lib_auto_core::{
-    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, SiteManifest,
+    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, AutoLane, BrandNeed,
+    SiteManifest, select_brand,
 };
 
 use crate::{
     AutoVendorLib, ModeledVendorBridge, VendorEffectClass, VendorSiteFabric, VendorWarrant,
     auto_vendor_site_symbol, cassette_vendor_fabric, install_auto_vendor_lib, manifest_operation,
-    vendor_cassette, vendor_irreversible_request_expr, vendor_request_expr,
+    oem_site_cassettes, oem_site_manifests, vendor_cassette, vendor_irreversible_request_expr,
+    vendor_request_expr, xentry_manifest,
 };
 
 #[test]
@@ -31,6 +33,103 @@ fn library_exports_manifest_sites() {
         .cloned()
         .unwrap();
     assert!(value.object().as_eval_fabric().is_some());
+}
+
+#[test]
+fn oem_manifests_install_through_single_vendor_library() {
+    let manifests = oem_site_manifests();
+    let lib = AutoVendorLib::modeled(manifests.clone());
+    let exports = lib
+        .manifest()
+        .exports
+        .iter()
+        .map(export_symbol)
+        .collect::<Vec<_>>();
+
+    for manifest in &manifests {
+        assert!(
+            exports.contains(&auto_vendor_site_symbol(manifest).to_string()),
+            "missing site export for {}",
+            manifest.site
+        );
+    }
+
+    let mut cx = cx();
+    install_auto_vendor_lib(&mut cx, manifests.clone()).unwrap();
+    for manifest in &manifests {
+        assert!(
+            cx.registry()
+                .site_by_symbol(&auto_vendor_site_symbol(manifest))
+                .is_some(),
+            "missing installed site {}",
+            manifest.site
+        );
+    }
+}
+
+#[test]
+fn brand_select_ranks_oem_sites_before_bosch_fallback() {
+    let manifests = oem_site_manifests();
+
+    let volvo = select_brand(&manifests, &brand_need("volvo", &["read", "info"])).unwrap();
+    assert_eq!(volvo.manifest.site, "vida");
+    assert!(volvo.exact_make);
+
+    let saab = select_brand(&manifests, &brand_need("saab", &["read"])).unwrap();
+    assert_eq!(saab.manifest.site, "esitronic");
+    assert!(!saab.exact_make);
+
+    let no_match = select_brand(&manifests, &brand_need("saab", &["parts"]));
+    assert!(matches!(no_match, Err(Error::Eval(message)) if message.contains("missing parts")));
+
+    let denied = select_brand(
+        &manifests,
+        &brand_need("bmw", &["service"]).requiring(CapabilityName::new(AUTO_CONTROL_EXEC)),
+    );
+    assert!(matches!(denied, Err(Error::Eval(message)) if message.contains("capability ceiling")));
+}
+
+#[test]
+fn modeled_oem_cassettes_replay_and_denied_caps_fail_closed() {
+    let bridge = Arc::new(ModeledVendorBridge::with_cassettes(oem_site_cassettes()));
+    let mut cx = cx_with(&[AUTO_DIAGNOSTICS_READ, AUTO_SERVICE_WRITE]);
+    let fabric = VendorSiteFabric::new(xentry_manifest(), bridge);
+
+    let read = fabric
+        .realize(
+            &mut cx,
+            request(
+                vendor_request_expr("read/dtc", Expr::Map(Vec::new())),
+                &[AUTO_DIAGNOSTICS_READ],
+            ),
+        )
+        .unwrap();
+    assert!(expr_text(&mut cx, &read.value).contains("mercedes modeled DTC read"));
+
+    let code = fabric
+        .realize(
+            &mut cx,
+            request(
+                vendor_request_expr("code/sca", Expr::Map(Vec::new())),
+                &[AUTO_SERVICE_WRITE],
+            ),
+        )
+        .unwrap();
+    assert!(expr_text(&mut cx, &code.value).contains("mercedes modeled service coding"));
+
+    let mut denied_cx = cx_with(&[AUTO_DIAGNOSTICS_READ]);
+    let denied_bridge = Arc::new(ModeledVendorBridge::with_cassettes(oem_site_cassettes()));
+    let denied_fabric = VendorSiteFabric::new(crate::ista_manifest(), denied_bridge);
+    let denied = denied_fabric.realize(
+        &mut denied_cx,
+        request(
+            vendor_request_expr("code/coding", Expr::Map(Vec::new())),
+            &[AUTO_SERVICE_WRITE],
+        ),
+    );
+    assert!(
+        matches!(denied, Err(Error::CapabilityDenied { capability }) if capability.as_str() == AUTO_SERVICE_WRITE)
+    );
 }
 
 #[test]
@@ -259,6 +358,13 @@ fn fixture_manifest() -> SiteManifest {
     )
 }
 
+fn brand_need(make: &str, lanes: &[&str]) -> BrandNeed {
+    BrandNeed::new(
+        make,
+        lanes.iter().map(|lane| AutoLane::new(*lane)).collect(),
+    )
+}
+
 fn request(expr: Expr, capabilities: &[&'static str]) -> EvalRequest {
     EvalRequest {
         expr,
@@ -275,6 +381,20 @@ fn request(expr: Expr, capabilities: &[&'static str]) -> EvalRequest {
         stream_buffer: None,
         stream: false,
         trace: false,
+    }
+}
+
+fn export_symbol(export: &sim_kernel::Export) -> String {
+    match export {
+        sim_kernel::Export::Class { symbol, .. }
+        | sim_kernel::Export::Function { symbol, .. }
+        | sim_kernel::Export::Macro { symbol, .. }
+        | sim_kernel::Export::Shape { symbol, .. }
+        | sim_kernel::Export::Codec { symbol, .. }
+        | sim_kernel::Export::NumberDomain { symbol, .. }
+        | sim_kernel::Export::Value { symbol }
+        | sim_kernel::Export::Site { symbol, .. }
+        | sim_kernel::Export::Open { symbol, .. } => symbol.to_string(),
     }
 }
 

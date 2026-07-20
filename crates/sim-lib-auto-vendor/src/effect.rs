@@ -2,7 +2,7 @@
 
 use sim_kernel::{CapabilityName, Error, Result};
 use sim_lib_auto_core::{
-    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, AutoLane,
+    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, AutoLane, OpCap,
     SiteManifest,
 };
 
@@ -49,13 +49,34 @@ pub fn manifest_operation(manifest: &SiteManifest, operation: &str) -> Result<Ma
             manifest.site
         )));
     }
-    let effect = classify_operation(operation);
+    let policy = manifest
+        .op_caps
+        .iter()
+        .find(|item| item.operation == operation);
+    let effect = policy
+        .map(effect_from_policy)
+        .transpose()?
+        .unwrap_or_else(|| classify_operation(operation));
     Ok(ManifestOperation {
         operation: operation.to_owned(),
         lane: lane_for(manifest, operation, effect),
-        capability: capability_for(operation, effect),
+        capability: policy
+            .map(|item| item.capability.clone())
+            .unwrap_or_else(|| capability_for(operation, effect)),
         effect,
     })
+}
+
+fn effect_from_policy(policy: &OpCap) -> Result<VendorEffectClass> {
+    match policy.effect_class.to_ascii_lowercase().as_str() {
+        "pure" | "read" | "diagnostic-read" => Ok(VendorEffectClass::Pure),
+        "reversible" | "service-write" | "control-write" => Ok(VendorEffectClass::Reversible),
+        "irreversible" | "control-exec" => Ok(VendorEffectClass::Irreversible),
+        other => Err(Error::Eval(format!(
+            "auto vendor manifest op {} has unknown effect class {other}",
+            policy.operation
+        ))),
+    }
 }
 
 fn classify_operation(operation: &str) -> VendorEffectClass {
@@ -96,12 +117,18 @@ fn lane_for(manifest: &SiteManifest, operation: &str, effect: VendorEffectClass)
     let lane = manifest
         .lanes
         .iter()
-        .find(|lane| lane.as_str() == preferred)
+        .find(|lane| operation.contains(lane.as_str()))
         .or_else(|| {
             manifest
                 .lanes
                 .iter()
-                .find(|lane| operation.contains(lane.as_str()))
+                .find(|lane| lane.as_str() == preferred)
+        })
+        .or_else(|| {
+            manifest
+                .lanes
+                .iter()
+                .find(|lane| lower.contains(&lane.to_ascii_lowercase()))
         })
         .or_else(|| manifest.lanes.first())
         .cloned()

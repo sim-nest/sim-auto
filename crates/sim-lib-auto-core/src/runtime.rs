@@ -19,7 +19,16 @@ const AUTO_CITIZENS: &[&str] = &[
     "auto/SiteManifest",
 ];
 
-const AUTO_LANES: &[&str] = &["diagnostics", "telemetry", "manifest", "service"];
+const AUTO_LANES: &[&str] = &[
+    "diagnostics",
+    "telemetry",
+    "manifest",
+    "read",
+    "info",
+    "parts",
+    "service",
+    "control",
+];
 
 /// Loadable library that contributes SIM automotive core citizens and values.
 #[derive(Clone, Copy, Debug, Default)]
@@ -66,7 +75,8 @@ impl Lib for AutoCoreLib {
         linker.value(
             manifest_shape_symbol(),
             cx.factory().string(
-                "auto/SiteManifest v0 site vehicle brand lanes transports operations".to_owned(),
+                "auto/SiteManifest v0 site vehicle brand makes lanes transports operations op-caps ceiling"
+                    .to_owned(),
             )?,
         )?;
         Ok(())

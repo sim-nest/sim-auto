@@ -13,6 +13,7 @@ mod capability;
 pub mod manifest;
 mod read_construct;
 mod runtime;
+pub mod select;
 pub mod session;
 
 pub use capability::{
@@ -28,5 +29,8 @@ pub use read_construct::{read_construct_expr, text_read_construct_expr, vehicle_
 pub use runtime::{
     AutoCoreLib, auto_caps_symbol, auto_citizen_registry, auto_citizen_symbols, auto_lanes_symbol,
     install_auto_core_lib, manifest_shape_symbol,
+};
+pub use select::{
+    BrandNeed, BrandSelection, installed_brand_caps, select_brand, select_brand_caps,
 };
 pub use session::{AutoSession, TransportPlacement};

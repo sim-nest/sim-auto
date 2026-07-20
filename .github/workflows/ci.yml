@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: |
+          git clone https://github.com/sim-nest/sim-tooling ../sim-tooling
+          git -C ../sim-tooling checkout d1e9f3ea6861b3b2b1cfd142124c4556de1a0c74
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -22,3 +25,5 @@ jobs:
       - run: cargo clippy --workspace --all-features --all-targets -- -D warnings
       - run: cargo test --workspace --all-features
       - run: cargo run -p xtask -- simdoc --check
+        env:
+          SIMDOC_TOOLING_MANIFEST: ${{ github.workspace }}/../sim-tooling/Cargo.toml

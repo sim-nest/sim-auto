@@ -19,6 +19,10 @@ mod runtime;
 mod sites;
 
 #[cfg(test)]
+mod supplier_tests;
+#[cfg(test)]
+mod test_support;
+#[cfg(test)]
 mod tests;
 
 pub use bridge::{ModeledVendorBridge, ModeledVendorCassette, VendorBridge};
@@ -28,6 +32,7 @@ pub use gate::{VendorGateLedger, VendorGateRecord, VendorWarrant, warranted_effe
 pub use request::{VendorBridgeRequest, vendor_irreversible_request_expr, vendor_request_expr};
 pub use runtime::{AutoVendorLib, auto_vendor_site_symbol, install_auto_vendor_lib};
 pub use sites::{
-    esitronic_manifest, ista_manifest, odis_manifest, oem_site_cassettes, oem_site_manifests,
-    vida_manifest, xentry_manifest,
+    biluppgifter_se_manifest, esitronic_manifest, haynespro_manifest, ista_manifest,
+    mekonomen_pro_manifest, odis_manifest, oem_site_cassettes, oem_site_manifests,
+    supplier_site_cassettes, supplier_site_manifests, vida_manifest, xentry_manifest,
 };

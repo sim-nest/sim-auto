@@ -3,10 +3,10 @@
   "generated_by": "cargo run -p xtask -- simdoc",
   "generation_timestamp": "2026-07-19T21:53:10+02:00",
   "generator": "xtask repo-contract v1",
-  "git_commit": "91b4e09e4f7cde9ca8171dc3f246eb7ad40b7e7f",
+  "git_commit": "e9472dbfc4c283aa3d71f935e141644f2775fb42",
   "repo": "sim-auto",
   "schema": "sim.provenance.v1",
-  "source_commit": "91b4e09e4f7cde9ca8171dc3f246eb7ad40b7e7f",
+  "source_commit": "e9472dbfc4c283aa3d71f935e141644f2775fb42",
   "source_remote": "https://github.com/sim-nest/sim-auto",
   "validation_commands": [
     "cargo fmt --all --check",
@@ -19,9 +19,9 @@
     "cargo run -p xtask -- validation-matrix --check --repo .",
     "cargo run -p xtask -- crate-catalog --check --repo ."
   ],
-  "workspace_hash": "57d16a07df429763",
+  "workspace_hash": "bef8f6fecbc87bff",
   "workspace_hash_algorithm": "fnv1a64",
-  "workspace_hash_input_count": 71,
+  "workspace_hash_input_count": 73,
   "workspace_hash_inputs": [
     "Cargo.toml",
     "crates/sim-codec-uds/Cargo.toml",
@@ -90,6 +90,8 @@
     "crates/sim-lib-auto-vendor/src/request.rs",
     "crates/sim-lib-auto-vendor/src/runtime.rs",
     "crates/sim-lib-auto-vendor/src/sites.rs",
+    "crates/sim-lib-auto-vendor/src/supplier_tests.rs",
+    "crates/sim-lib-auto-vendor/src/test_support.rs",
     "crates/sim-lib-auto-vendor/src/tests.rs",
     "recipes/auto-core-citizens/Cargo.toml",
     "recipes/auto-core-citizens/recipe.toml",

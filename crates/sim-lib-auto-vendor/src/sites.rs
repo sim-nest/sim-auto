@@ -2,7 +2,7 @@
 
 use sim_kernel::{CapabilityName, Expr, Symbol};
 use sim_lib_auto_core::{
-    AUTO_DIAGNOSTICS_READ, AUTO_SERVICE_WRITE, OpCap, SiteManifest, TransportSpec,
+    AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, OpCap, SiteManifest, TransportSpec,
 };
 
 use crate::ModeledVendorCassette;
@@ -61,6 +61,94 @@ pub fn oem_site_cassettes() -> Vec<ModeledVendorCassette> {
             "bosch modeled repair information",
         ),
     ]
+}
+
+/// Returns the modeled public data and supplier site manifests.
+pub fn supplier_site_manifests() -> Vec<SiteManifest> {
+    vec![
+        haynespro_manifest(),
+        biluppgifter_se_manifest(),
+        mekonomen_pro_manifest(),
+    ]
+}
+
+/// Returns synthetic modeled replies for public data and supplier sites.
+pub fn supplier_site_cassettes() -> Vec<ModeledVendorCassette> {
+    vec![
+        cassette(
+            "haynespro",
+            "read/identity",
+            "haynespro modeled vehicle identity",
+        ),
+        cassette(
+            "haynespro",
+            "info/procedure",
+            "haynespro modeled repair information",
+        ),
+        cassette(
+            "biluppgifter-se",
+            "read/plate-lookup",
+            "biluppgifter.se modeled Swedish plate lookup",
+        ),
+        cassette(
+            "mekonomen-pro",
+            "parts/catalog-lookup",
+            "mekonomen pro modeled parts catalog",
+        ),
+        cassette(
+            "mekonomen-pro",
+            "order/status",
+            "mekonomen pro modeled order status",
+        ),
+        cassette(
+            "mekonomen-pro",
+            "order/place",
+            "mekonomen pro modeled order accepted",
+        ),
+    ]
+}
+
+/// HaynesPro modeled manifest for vehicle data and repair information.
+pub fn haynespro_manifest() -> SiteManifest {
+    manifest(
+        "haynespro",
+        "vehicle-multibrand",
+        "haynespro",
+        &["*"],
+        &["read", "info"],
+        &[
+            ("read/identity", AUTO_DIAGNOSTICS_READ, PURE),
+            ("info/procedure", AUTO_DIAGNOSTICS_READ, PURE),
+        ],
+    )
+}
+
+/// biluppgifter.se modeled manifest for Swedish registration lookup.
+pub fn biluppgifter_se_manifest() -> SiteManifest {
+    manifest(
+        "biluppgifter-se",
+        "vehicle-se-registration",
+        "biluppgifter.se",
+        &["*"],
+        &["read", "identity"],
+        &[("read/plate-lookup", AUTO_DIAGNOSTICS_READ, PURE)],
+    )
+}
+
+/// Mekonomen Pro modeled manifest for parts lookup and supplier ordering.
+pub fn mekonomen_pro_manifest() -> SiteManifest {
+    manifest(
+        "mekonomen-pro",
+        "vehicle-multibrand",
+        "mekonomen-pro",
+        &["*"],
+        &["parts", "order"],
+        &[
+            ("parts/catalog-lookup", AUTO_DIAGNOSTICS_READ, PURE),
+            ("order/status", AUTO_ORDER, PURE),
+            ("order/place", AUTO_ORDER, REVERSIBLE),
+        ],
+    )
 }
 
 /// Mercedes-Benz XENTRY, WIS, and EPC modeled manifest.

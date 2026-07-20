@@ -1,14 +1,14 @@
 use std::sync::Arc;
 
-use sim_kernel::{
-    CapabilityName, Consistency, Cx, Error, EvalFabric, EvalMode, EvalRequest, Expr, Lib, Symbol,
-    Value, testing::bare_cx as cx,
-};
+use sim_kernel::{CapabilityName, Error, EvalFabric, Expr, Lib, testing::bare_cx as cx};
 use sim_lib_auto_core::{
-    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, AutoLane, BrandNeed,
-    SiteManifest, select_brand,
+    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, SiteManifest,
+    select_brand,
 };
 
+use crate::test_support::{
+    RequestEdit, WithoutHumanGate, brand_need, cx_with, export_symbol, expr_text, request,
+};
 use crate::{
     AutoVendorLib, ModeledVendorBridge, VendorEffectClass, VendorSiteFabric, VendorWarrant,
     auto_vendor_site_symbol, cassette_vendor_fabric, install_auto_vendor_lib, manifest_operation,
@@ -356,91 +356,4 @@ fn fixture_manifest() -> SiteManifest {
             "control/code".to_owned(),
         ],
     )
-}
-
-fn brand_need(make: &str, lanes: &[&str]) -> BrandNeed {
-    BrandNeed::new(
-        make,
-        lanes.iter().map(|lane| AutoLane::new(*lane)).collect(),
-    )
-}
-
-fn request(expr: Expr, capabilities: &[&'static str]) -> EvalRequest {
-    EvalRequest {
-        expr,
-        result_shape: None,
-        required_capabilities: capabilities
-            .iter()
-            .copied()
-            .map(CapabilityName::new)
-            .collect(),
-        deadline: None,
-        consistency: Consistency::LocalFirst,
-        mode: EvalMode::Eval,
-        answer_limit: None,
-        stream_buffer: None,
-        stream: false,
-        trace: false,
-    }
-}
-
-fn export_symbol(export: &sim_kernel::Export) -> String {
-    match export {
-        sim_kernel::Export::Class { symbol, .. }
-        | sim_kernel::Export::Function { symbol, .. }
-        | sim_kernel::Export::Macro { symbol, .. }
-        | sim_kernel::Export::Shape { symbol, .. }
-        | sim_kernel::Export::Codec { symbol, .. }
-        | sim_kernel::Export::NumberDomain { symbol, .. }
-        | sim_kernel::Export::Value { symbol }
-        | sim_kernel::Export::Site { symbol, .. }
-        | sim_kernel::Export::Open { symbol, .. } => symbol.to_string(),
-    }
-}
-
-trait RequestEdit {
-    fn with_expr(self, expr: Expr) -> Self;
-}
-
-impl RequestEdit for EvalRequest {
-    fn with_expr(mut self, expr: Expr) -> Self {
-        self.expr = expr;
-        self
-    }
-}
-
-trait WithoutHumanGate {
-    fn without_human_gate(self) -> Expr;
-}
-
-impl WithoutHumanGate for Expr {
-    fn without_human_gate(self) -> Expr {
-        let Expr::Map(fields) = self else {
-            return self;
-        };
-        Expr::Map(
-            fields
-                .into_iter()
-                .map(|(key, value)| {
-                    if key == Expr::Symbol(Symbol::new("human-approved")) {
-                        (key, Expr::Bool(false))
-                    } else {
-                        (key, value)
-                    }
-                })
-                .collect(),
-        )
-    }
-}
-
-fn cx_with(capabilities: &[&'static str]) -> Cx {
-    let mut cx = cx();
-    for capability in capabilities {
-        cx.grant_named(capability);
-    }
-    cx
-}
-
-fn expr_text(cx: &mut Cx, value: &Value) -> String {
-    format!("{:?}", value.object().as_expr(cx).unwrap())
 }

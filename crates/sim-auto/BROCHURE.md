@@ -1,7 +1,6 @@
 # sim-auto
 
-In one line: A command entry for the modeled automotive bay that boots through
-SIM's shared runtime loader.
+In one line: A modeled auto-bay command that boots through SIM's loader.
 
 ## What it gives you
 

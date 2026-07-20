@@ -1,7 +1,6 @@
 # sim-lib-view-bay
 
-In one line: A modeled repair bay screen that turns automotive work into one
-portable Scene with matching operator actions.
+In one line: A modeled repair bay Scene with checked operator actions.
 
 ## What it gives you
 

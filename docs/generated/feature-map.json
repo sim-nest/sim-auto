@@ -9,6 +9,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "sim-auto"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-codec-uds"
     },
     {
@@ -40,6 +45,11 @@
       "features": [],
       "group": "workspace",
       "package": "sim-lib-auto-vendor"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-view-bay"
     },
     {
       "features": [],

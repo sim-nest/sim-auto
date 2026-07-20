@@ -1,0 +1,24 @@
+[package]
+name = "sim-lib-view-bay"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Automotive bay Scene and Intent surface for SIM."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-auto"
+homepage = "https://github.com/sim-nest/sim-auto"
+
+[dependencies]
+sim-kernel = { version = "0.1.4" }
+sim-lib-auto-core = { version = "0.1.0", path = "../sim-lib-auto-core" }
+sim-lib-auto-diag = { version = "0.1.0", path = "../sim-lib-auto-diag" }
+sim-lib-auto-info = { version = "0.1.0", path = "../sim-lib-auto-info" }
+sim-lib-auto-parts = { version = "0.1.0", path = "../sim-lib-auto-parts" }
+sim-lib-auto-vendor = { version = "0.1.0", path = "../sim-lib-auto-vendor" }
+sim-lib-intent = { version = "0.1.1" }
+sim-lib-scene = { version = "0.1.2" }
+sim-lib-view = { version = "0.1.2" }
+
+[lints]
+workspace = true

@@ -36,6 +36,7 @@
   "groups": {
     "workspace": [
       "auto-core-citizens",
+      "sim-auto",
       "sim-codec-uds",
       "sim-lib-auto-core",
       "sim-lib-auto-diag",
@@ -43,6 +44,7 @@
       "sim-lib-auto-parts",
       "sim-lib-auto-vehicle",
       "sim-lib-auto-vendor",
+      "sim-lib-view-bay",
       "xtask"
     ]
   },
@@ -81,7 +83,7 @@
       "reason": "live vendor eval-fabric handle; reconstruct from auto/SiteManifest descriptor data"
     }
   ],
-  "package_count": 9,
+  "package_count": 11,
   "packages": [
     {
       "crate_name": "auto-core-citizens",
@@ -115,6 +117,52 @@
           ],
           "name": "auto-core-citizens",
           "src": "recipes/auto-core-citizens/src/main.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_auto",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-view-bay",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Bootloader-backed automotive bay command surface for SIM.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-auto/Cargo.toml",
+      "name": "sim-auto",
+      "publish": "true",
+      "root": "crates/sim-auto",
+      "rustdoc_summary": "Bootloader-backed automotive command surface.",
+      "target_kinds": [
+        "bin",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_auto",
+          "src": "crates/sim-auto/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "bin"
+          ],
+          "name": "sim-auto",
+          "src": "crates/sim-auto/src/main.rs"
         }
       ]
     },
@@ -413,6 +461,69 @@
       ]
     },
     {
+      "crate_name": "sim_lib_view_bay",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-auto-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-auto-diag",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-auto-info",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-auto-parts",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-auto-vendor",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Automotive bay Scene and Intent surface for SIM.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-view-bay/Cargo.toml",
+      "name": "sim-lib-view-bay",
+      "publish": "true",
+      "root": "crates/sim-lib-view-bay",
+      "rustdoc_summary": "Automotive bay Scene and Intent projection.",
+      "target_kinds": [
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_view_bay",
+          "src": "crates/sim-lib-view-bay/src/lib.rs"
+        }
+      ]
+    },
+    {
       "crate_name": "xtask",
       "dependencies": [],
       "description": "Repository automation for sim-auto.",
@@ -445,10 +556,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-19T21:53:10+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "3d384c85326b1adf8309e900367d05b12c5e67e6",
+    "git_commit": "85ae2f304b0cfb55e5b19c50952af12b7c9f6dfe",
     "repo": "sim-auto",
     "schema": "sim.provenance.v1",
-    "source_commit": "3d384c85326b1adf8309e900367d05b12c5e67e6",
+    "source_commit": "85ae2f304b0cfb55e5b19c50952af12b7c9f6dfe",
     "source_remote": "https://github.com/sim-nest/sim-auto",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -461,11 +572,17 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "6d1ccee9a1f71509",
+    "workspace_hash": "62f59299588dd5c7",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 75,
+    "workspace_hash_input_count": 87,
     "workspace_hash_inputs": [
       "Cargo.toml",
+      "crates/sim-auto/Cargo.toml",
+      "crates/sim-auto/src/command.rs",
+      "crates/sim-auto/src/entrypoint.rs",
+      "crates/sim-auto/src/lib.rs",
+      "crates/sim-auto/src/main.rs",
+      "crates/sim-auto/src/tests.rs",
       "crates/sim-codec-uds/Cargo.toml",
       "crates/sim-codec-uds/build.rs",
       "crates/sim-codec-uds/recipes/book.toml",
@@ -537,6 +654,12 @@
       "crates/sim-lib-auto-vendor/src/supplier_tests.rs",
       "crates/sim-lib-auto-vendor/src/test_support.rs",
       "crates/sim-lib-auto-vendor/src/tests.rs",
+      "crates/sim-lib-view-bay/Cargo.toml",
+      "crates/sim-lib-view-bay/src/intent.rs",
+      "crates/sim-lib-view-bay/src/lib.rs",
+      "crates/sim-lib-view-bay/src/model.rs",
+      "crates/sim-lib-view-bay/src/scene.rs",
+      "crates/sim-lib-view-bay/src/tests.rs",
       "recipes/auto-core-citizens/Cargo.toml",
       "recipes/auto-core-citizens/recipe.toml",
       "xtask/Cargo.toml"

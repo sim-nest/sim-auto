@@ -16,6 +16,9 @@ The parts crate exposes modeled EPC and aftermarket catalog directories and runs
 supplier ordering through the shared reversible-effect gate.
 The vendor engine crate turns brand manifests into loadable placement sites and
 keeps vendor-facing operations behind an effect gate.
+The bay view crate projects the modeled work into a validated Scene and matching
+Intent values.
+The command crate registers the `auto` verb through the shared Bootloader.
 
 The repository keeps vehicle identities modeled and synthetic by default. Tests
 guard committed fixtures against values shaped like VINs, Swedish plates, dealer
@@ -36,6 +39,8 @@ cookies, and vendor tokens.
   plus HaynesPro and biluppgifter.se bridge contracts gated by `net/http`.
 - `sim-lib-auto-vendor`: manifest-driven vendor sites and warranted dispatch for
   read, reversible, and irreversible automotive operations.
+- `sim-lib-view-bay`: automotive bay Scene, SurfaceCaps, and Intent projection.
+- `sim-auto`: Bootloader-backed modeled automotive command surface.
 
 ## Validation
 

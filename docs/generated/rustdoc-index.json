@@ -9,6 +9,13 @@
       "summary": "Runnable recipe for sim-auto core citizens."
     },
     {
+      "crate_name": "sim_auto",
+      "group": "workspace",
+      "manifest": "crates/sim-auto/Cargo.toml",
+      "package": "sim-auto",
+      "summary": "Bootloader-backed automotive command surface."
+    },
+    {
       "crate_name": "sim_codec_uds",
       "group": "workspace",
       "manifest": "crates/sim-codec-uds/Cargo.toml",
@@ -56,6 +63,13 @@
       "manifest": "crates/sim-lib-auto-vendor/Cargo.toml",
       "package": "sim-lib-auto-vendor",
       "summary": "Manifest-driven automotive vendor site engine."
+    },
+    {
+      "crate_name": "sim_lib_view_bay",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-view-bay/Cargo.toml",
+      "package": "sim-lib-view-bay",
+      "summary": "Automotive bay Scene and Intent projection."
     },
     {
       "crate_name": "xtask",

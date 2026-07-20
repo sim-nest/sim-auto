@@ -1,0 +1,81 @@
+{
+  "generator": "xtask crate-catalog v1",
+  "package_count": 6,
+  "packages": [
+    {
+      "description": "UDS and OBD-II byte-frame codec for SIM automotive diagnostics.",
+      "generated_readme": false,
+      "manifest": "crates/sim-codec-uds/Cargo.toml",
+      "name": "sim-codec-uds",
+      "publish": "true",
+      "readme": "crates/sim-codec-uds/README.md",
+      "root": "crates/sim-codec-uds",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ]
+    },
+    {
+      "description": "Automotive domain citizens and capability manifests for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-core/Cargo.toml",
+      "name": "sim-lib-auto-core",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-core/README.md",
+      "root": "crates/sim-lib-auto-core",
+      "target_kinds": [
+        "lib",
+        "test"
+      ]
+    },
+    {
+      "description": "Modeled automotive diagnostic fabric for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-diag/Cargo.toml",
+      "name": "sim-lib-auto-diag",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-diag/README.md",
+      "root": "crates/sim-lib-auto-diag",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ]
+    },
+    {
+      "description": "Manifest-driven automotive vendor site engine for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-vendor/Cargo.toml",
+      "name": "sim-lib-auto-vendor",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-vendor/README.md",
+      "root": "crates/sim-lib-auto-vendor",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Runnable recipe for sim-auto core citizens.",
+      "generated_readme": false,
+      "manifest": "recipes/auto-core-citizens/Cargo.toml",
+      "name": "auto-core-citizens",
+      "publish": "false",
+      "readme": "recipes/auto-core-citizens/README.md",
+      "root": "recipes/auto-core-citizens",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Repository automation for sim-auto.",
+      "generated_readme": true,
+      "manifest": "xtask/Cargo.toml",
+      "name": "xtask",
+      "publish": "false",
+      "readme": "xtask/README.md",
+      "root": "xtask",
+      "target_kinds": [
+        "bin"
+      ]
+    }
+  ]
+}

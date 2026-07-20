@@ -16,6 +16,8 @@ The parts crate exposes modeled EPC and aftermarket catalog directories and runs
 supplier ordering through the shared reversible-effect gate.
 The vendor engine crate turns brand manifests into loadable placement sites and
 keeps vendor-facing operations behind an effect gate.
+The order crate ties modeled vehicle, diagnostic, information, parts, order,
+coding, and flash checks into one ledgered work-order conformance session.
 The bay view crate projects the modeled work into a validated Scene and matching
 Intent values.
 The command crate registers the `auto` verb through the shared Bootloader.
@@ -33,6 +35,8 @@ cookies, and vendor tokens.
   cassette-backed replay for synthetic ECU reads.
 - `sim-lib-auto-info`: modeled WIS, ISTA, VIDA, ESI[tronic], HaynesPro, and
   shop-authored repair documents ranked by vehicle, DTC, ECU, symptom, and lane.
+- `sim-lib-auto-order`: ledgered modeled work-order session with conformance
+  replay, parent-grant delegation checks, and balanced invoice export data.
 - `sim-lib-auto-parts`: modeled EPC and aftermarket parts directories plus
   Mekonomen Pro-style reversible ordering with a fixture ledger.
 - `sim-lib-auto-vehicle`: modeled vehicle identity lookup by plate or VIN label,

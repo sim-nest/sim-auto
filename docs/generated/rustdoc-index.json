@@ -44,6 +44,13 @@
       "summary": "Modeled automotive repair-information documents."
     },
     {
+      "crate_name": "sim_lib_auto_order",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-order/Cargo.toml",
+      "package": "sim-lib-auto-order",
+      "summary": "Ledgered modeled automotive work-order sessions."
+    },
+    {
       "crate_name": "sim_lib_auto_parts",
       "group": "workspace",
       "manifest": "crates/sim-lib-auto-parts/Cargo.toml",

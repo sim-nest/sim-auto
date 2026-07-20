@@ -6,6 +6,7 @@ members = [
   "crates/sim-lib-auto-core",
   "crates/sim-lib-auto-diag",
   "crates/sim-lib-auto-info",
+  "crates/sim-lib-auto-order",
   "crates/sim-lib-auto-parts",
   "crates/sim-lib-auto-vehicle",
   "crates/sim-lib-auto-vendor",

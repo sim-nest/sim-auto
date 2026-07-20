@@ -10,6 +10,7 @@
 #![deny(missing_docs)]
 
 mod capability;
+pub mod flash;
 pub mod manifest;
 mod read_construct;
 mod runtime;
@@ -17,9 +18,11 @@ pub mod select;
 pub mod session;
 
 pub use capability::{
-    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_MANIFEST_READ, AUTO_ORDER, AUTO_SERVICE_WRITE,
-    AUTO_TELEMETRY_READ, AUTO_TRANSPORT_CONNECT, auto_capability_names, auto_capability_texts,
+    AUTO_CONTROL_EXEC, AUTO_DIAGNOSTICS_READ, AUTO_FLASH, AUTO_MANIFEST_READ, AUTO_ORDER,
+    AUTO_SERVICE_WRITE, AUTO_TELEMETRY_READ, AUTO_TRANSPORT_CONNECT, auto_capability_names,
+    auto_capability_texts,
 };
+pub use flash::{ModeledFlashSession, StockMapBackup, stock_content_key};
 pub use manifest::{
     AutoLane, BrandCaps, Dtc, DtcStatus, EffectClass, OpCap, SiteManifest, TransportSpec,
     VehicleId, auto_lane, control_effect, diagnostic_effect, diagnostic_lane, manifest_lane,

@@ -28,6 +28,7 @@ const AUTO_LANES: &[&str] = &[
     "parts",
     "service",
     "control",
+    "flash",
 ];
 
 /// Loadable library that contributes SIM automotive core citizens and values.

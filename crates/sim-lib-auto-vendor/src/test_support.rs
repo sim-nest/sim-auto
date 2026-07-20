@@ -90,3 +90,16 @@ pub(crate) fn cx_with(capabilities: &[&'static str]) -> Cx {
 pub(crate) fn expr_text(cx: &mut Cx, value: &Value) -> String {
     format!("{:?}", value.object().as_expr(cx).unwrap())
 }
+
+pub(crate) fn reversal_artifact(content_key: &str) -> Expr {
+    Expr::Map(vec![
+        (
+            Expr::Symbol(Symbol::new("content-key")),
+            Expr::String(content_key.to_owned()),
+        ),
+        (
+            Expr::Symbol(Symbol::new("bytes")),
+            Expr::Bytes(content_key.as_bytes().to_vec()),
+        ),
+    ])
+}

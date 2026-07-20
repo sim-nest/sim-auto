@@ -12,6 +12,8 @@ pub const AUTO_CONTROL_EXEC: &str = "auto/control/exec";
 pub const AUTO_SERVICE_WRITE: &str = "auto/service/write";
 /// Place or revise supplier orders for automotive parts.
 pub const AUTO_ORDER: &str = "auto/order";
+/// Read and write access for modeled ECU stock maps and flash payloads.
+pub const AUTO_FLASH: &str = "auto/flash";
 /// Read access to automotive site manifests.
 pub const AUTO_MANIFEST_READ: &str = "auto/manifest/read";
 /// Connect access for automotive transport endpoints.
@@ -23,6 +25,7 @@ const AUTO_CAPABILITIES: &[&str] = &[
     AUTO_CONTROL_EXEC,
     AUTO_SERVICE_WRITE,
     AUTO_ORDER,
+    AUTO_FLASH,
     AUTO_MANIFEST_READ,
     AUTO_TRANSPORT_CONNECT,
 ];

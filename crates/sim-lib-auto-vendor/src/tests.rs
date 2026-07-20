@@ -8,6 +8,7 @@ use sim_lib_auto_core::{
 
 use crate::test_support::{
     RequestEdit, WithoutHumanGate, brand_need, cx_with, export_symbol, expr_text, request,
+    reversal_artifact,
 };
 use crate::{
     AutoVendorLib, ModeledVendorBridge, VendorEffectClass, VendorSiteFabric, VendorWarrant,
@@ -210,7 +211,7 @@ fn irreversible_op_requires_reversal_warrant_and_human_gate() {
             vendor_irreversible_request_expr(
                 "control/code",
                 Expr::String("coding".to_owned()),
-                Expr::String("stock-map".to_owned()),
+                reversal_artifact("stock-map"),
                 "warrant-1",
             )
             .without_human_gate(),
@@ -225,7 +226,7 @@ fn irreversible_op_requires_reversal_warrant_and_human_gate() {
                 vendor_irreversible_request_expr(
                     "control/code",
                     Expr::String("coding".to_owned()),
-                    Expr::String("stock-map".to_owned()),
+                    reversal_artifact("stock-map"),
                     "warrant-1",
                 ),
                 &[AUTO_CONTROL_EXEC],
@@ -238,6 +239,10 @@ fn irreversible_op_requires_reversal_warrant_and_human_gate() {
     let records = fabric.gate_ledger().records().unwrap();
     assert_eq!(records[0].effect, VendorEffectClass::Irreversible);
     assert!(records[0].reversal_artifact);
+    assert_eq!(
+        records[0].reversal_content_key.as_deref(),
+        Some("stock-map")
+    );
     assert_eq!(records[0].warrant.as_deref(), Some("warrant-1"));
     assert!(records[0].human_approved);
 }
@@ -273,7 +278,7 @@ fn modeled_cassette_exercises_one_op_of_each_class() {
                 vendor_irreversible_request_expr(
                     "control/code",
                     Expr::String("coding".to_owned()),
-                    Expr::String("stock-map".to_owned()),
+                    reversal_artifact("stock-map"),
                     "warrant-1",
                 ),
                 &[AUTO_CONTROL_EXEC],
@@ -312,7 +317,7 @@ fn operation_classification_fails_closed_for_unknown_ops() {
         sim_lib_auto_core::VehicleId::new("fixture", "vehicle-alpha"),
         Expr::String("coding".to_owned()),
     )
-    .with_reversal_artifact(Expr::String("stock-map".to_owned()))
+    .with_reversal_artifact(reversal_artifact("stock-map"))
     .with_warrant(VendorWarrant::new("warrant-1", "fixture"))
     .with_human_approval(true);
     assert_eq!(request.op, "control/code");

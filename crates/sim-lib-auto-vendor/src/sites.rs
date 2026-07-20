@@ -2,13 +2,15 @@
 
 use sim_kernel::{CapabilityName, Expr, Symbol};
 use sim_lib_auto_core::{
-    AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, OpCap, SiteManifest, TransportSpec,
+    AUTO_DIAGNOSTICS_READ, AUTO_FLASH, AUTO_ORDER, AUTO_SERVICE_WRITE, OpCap, SiteManifest,
+    TransportSpec,
 };
 
 use crate::ModeledVendorCassette;
 
 const PURE: &str = "pure";
 const REVERSIBLE: &str = "reversible";
+const IRREVERSIBLE: &str = "irreversible";
 
 /// Returns the modeled OEM diagnostic site manifests.
 pub fn oem_site_manifests() -> Vec<SiteManifest> {
@@ -106,6 +108,50 @@ pub fn supplier_site_cassettes() -> Vec<ModeledVendorCassette> {
             "mekonomen pro modeled order accepted",
         ),
     ]
+}
+
+/// Returns the modeled ECU flash site manifests.
+pub fn flash_site_manifests() -> Vec<SiteManifest> {
+    vec![autotuner_manifest()]
+}
+
+/// Returns synthetic modeled replies for ECU flash sites.
+pub fn flash_site_cassettes() -> Vec<ModeledVendorCassette> {
+    vec![
+        cassette("autotuner", "flash/read-ecu", "autotuner modeled ECU read"),
+        cassette(
+            "autotuner",
+            "flash/backup-stock",
+            "autotuner modeled stock backup",
+        ),
+        cassette(
+            "autotuner",
+            "flash/write",
+            "autotuner modeled flash accepted",
+        ),
+        cassette(
+            "autotuner",
+            "flash/restore-stock",
+            "autotuner modeled stock restore",
+        ),
+    ]
+}
+
+/// Autotuner modeled manifest for ECU stock backup, flash, and restore.
+pub fn autotuner_manifest() -> SiteManifest {
+    manifest(
+        "autotuner",
+        "vehicle-flash-fixture",
+        "autotuner",
+        &["*"],
+        &["read", "flash"],
+        &[
+            ("flash/read-ecu", AUTO_FLASH, PURE),
+            ("flash/backup-stock", AUTO_FLASH, REVERSIBLE),
+            ("flash/restore-stock", AUTO_FLASH, REVERSIBLE),
+            ("flash/write", AUTO_FLASH, IRREVERSIBLE),
+        ],
+    )
 }
 
 /// HaynesPro modeled manifest for vehicle data and repair information.

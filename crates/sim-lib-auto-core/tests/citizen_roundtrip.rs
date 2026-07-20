@@ -4,11 +4,12 @@ use sim_citizen::check_fixture;
 use sim_kernel::{CapabilityName, Cx, DefaultFactory, Expr, Lib, NoopEvalPolicy, Symbol};
 
 use sim_lib_auto_core::{
-    AUTO_DIAGNOSTICS_READ, AUTO_ORDER, AUTO_SERVICE_WRITE, AUTO_TRANSPORT_CONNECT, AutoCoreLib,
-    AutoLane, BrandCaps, Dtc, DtcStatus, EffectClass, OpCap, SiteManifest, TransportSpec,
-    VehicleId, auto_capability_names, auto_caps_symbol, auto_citizen_registry,
-    auto_citizen_symbols, auto_lanes_symbol, control_effect, diagnostic_effect, diagnostic_lane,
-    install_auto_core_lib, manifest_shape_symbol, telemetry_lane, vehicle_read_construct,
+    AUTO_DIAGNOSTICS_READ, AUTO_FLASH, AUTO_ORDER, AUTO_SERVICE_WRITE, AUTO_TRANSPORT_CONNECT,
+    AutoCoreLib, AutoLane, BrandCaps, Dtc, DtcStatus, EffectClass, ModeledFlashSession, OpCap,
+    SiteManifest, StockMapBackup, TransportSpec, VehicleId, auto_capability_names,
+    auto_caps_symbol, auto_citizen_registry, auto_citizen_symbols, auto_lanes_symbol,
+    control_effect, diagnostic_effect, diagnostic_lane, install_auto_core_lib,
+    manifest_shape_symbol, telemetry_lane, vehicle_read_construct,
 };
 
 const EXPECTED_CITIZENS: &[&str] = &[
@@ -120,6 +121,7 @@ fn core_lib_exports_values_and_classes() {
     };
     assert!(items.contains(&Expr::String(AUTO_DIAGNOSTICS_READ.to_owned())));
     assert!(items.contains(&Expr::String(AUTO_ORDER.to_owned())));
+    assert!(items.contains(&Expr::String(AUTO_FLASH.to_owned())));
 }
 
 #[test]
@@ -150,6 +152,26 @@ fn vehicle_helper_emits_citizen_read_construct() {
         items.first(),
         Some(&Expr::Symbol(Symbol::qualified("auto", "VehicleId")))
     );
+}
+
+#[test]
+fn modeled_flash_backup_flash_restore_round_trips_stock_bytes() {
+    let stock = vec![0x10, 0x20, 0x30, 0x40];
+    let tuned = vec![0xaa, 0xbb, 0xcc, 0xdd];
+    let mut session = ModeledFlashSession::new("DME", stock.clone());
+    assert_eq!(session.read_ecu(), stock.as_slice());
+
+    let backup = session.backup_stock();
+    assert_eq!(backup, StockMapBackup::new("DME", stock.clone()));
+    assert!(backup.content_key.starts_with("auto-stock-fnv1a64-"));
+    let artifact = format!("{:?}", backup.reversal_artifact());
+    assert!(artifact.contains("content-key"));
+
+    session.flash(tuned.clone(), &backup).unwrap();
+    assert_eq!(session.read_ecu(), tuned.as_slice());
+    let restored = session.restore(&backup).unwrap();
+    assert_eq!(restored, stock);
+    assert_eq!(session.read_ecu(), restored.as_slice());
 }
 
 fn cx() -> Cx {

@@ -46,6 +46,8 @@ pub struct VendorGateRecord {
     pub effect: VendorEffectClass,
     /// Whether a reversal artifact was attached.
     pub reversal_artifact: bool,
+    /// Content key carried by the reversal artifact.
+    pub reversal_content_key: Option<String>,
     /// Warrant id, when one was required.
     pub warrant: Option<String>,
     /// Whether the human gate was open.
@@ -138,12 +140,13 @@ fn require_diminished(
 }
 
 fn require_irreversible_gate(request: &VendorBridgeRequest) -> Result<()> {
-    if request.reversal_artifact.is_none() {
+    let Some(reversal_artifact) = &request.reversal_artifact else {
         return Err(Error::Eval(format!(
             "auto vendor irreversible op {} requires a reversal artifact",
             request.op
         )));
-    }
+    };
+    reversal_content_key(reversal_artifact)?;
     let Some(warrant) = &request.warrant else {
         return Err(Error::Eval(format!(
             "auto vendor irreversible op {} requires a warrant",
@@ -190,8 +193,46 @@ fn gate_record(request: &VendorBridgeRequest, operation: &ManifestOperation) -> 
         capability: operation.capability.clone(),
         effect: operation.effect,
         reversal_artifact: request.reversal_artifact.is_some(),
+        reversal_content_key: request
+            .reversal_artifact
+            .as_ref()
+            .and_then(|artifact| reversal_content_key(artifact).ok()),
         warrant: request.warrant.as_ref().map(|warrant| warrant.id.clone()),
         human_approved: request.human_approved,
+    }
+}
+
+fn reversal_content_key(artifact: &Expr) -> Result<String> {
+    let Expr::Map(entries) = artifact else {
+        return Err(Error::Eval(
+            "auto vendor reversal artifact requires a content-key field".to_owned(),
+        ));
+    };
+    for (key, value) in entries {
+        if field_name(key).as_deref() == Some("content-key") {
+            return field_text(value);
+        }
+    }
+    Err(Error::Eval(
+        "auto vendor reversal artifact requires a content-key field".to_owned(),
+    ))
+}
+
+fn field_name(expr: &Expr) -> Option<String> {
+    match expr {
+        Expr::String(value) => Some(value.trim_start_matches(':').to_owned()),
+        Expr::Symbol(symbol) => Some(symbol.name.trim_start_matches(':').to_owned()),
+        _ => None,
+    }
+}
+
+fn field_text(expr: &Expr) -> Result<String> {
+    match expr {
+        Expr::String(value) => Ok(value.clone()),
+        Expr::Symbol(symbol) => Ok(symbol.as_qualified_str()),
+        _ => Err(Error::Eval(
+            "auto vendor reversal content-key must be string or symbol".to_owned(),
+        )),
     }
 }
 

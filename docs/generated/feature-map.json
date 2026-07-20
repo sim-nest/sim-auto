@@ -24,6 +24,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "sim-lib-auto-info"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-lib-auto-vehicle"
     },
     {

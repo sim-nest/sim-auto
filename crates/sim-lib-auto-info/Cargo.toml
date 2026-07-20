@@ -1,0 +1,23 @@
+[package]
+name = "sim-lib-auto-info"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Modeled automotive repair-information documents for SIM."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-auto"
+homepage = "https://github.com/sim-nest/sim-auto"
+
+[dependencies]
+sim-codec-doc = { version = "0.1.1" }
+sim-kernel = { version = "0.1.4" }
+sim-lib-auto-core = { version = "0.1.0", path = "../sim-lib-auto-core" }
+sim-lib-scene = { version = "0.1.0" }
+sim-lib-view-doc = { version = "0.1.2" }
+
+[dev-dependencies]
+sim-kernel = { version = "0.1.4", features = ["test-support"] }
+
+[lints]
+workspace = true

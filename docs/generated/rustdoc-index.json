@@ -30,6 +30,13 @@
       "summary": "Modeled automotive diagnostic fabric."
     },
     {
+      "crate_name": "sim_lib_auto_info",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-info/Cargo.toml",
+      "package": "sim-lib-auto-info",
+      "summary": "Modeled automotive repair-information documents."
+    },
+    {
       "crate_name": "sim_lib_auto_vehicle",
       "group": "workspace",
       "manifest": "crates/sim-lib-auto-vehicle/Cargo.toml",

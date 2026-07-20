@@ -4,6 +4,7 @@ members = [
   "crates/sim-codec-uds",
   "crates/sim-lib-auto-core",
   "crates/sim-lib-auto-diag",
+  "crates/sim-lib-auto-vehicle",
   "crates/sim-lib-auto-vendor",
   "recipes/auto-core-citizens",
   "xtask",

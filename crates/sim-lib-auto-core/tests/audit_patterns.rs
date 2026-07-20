@@ -4,11 +4,17 @@ use regex::Regex;
 
 #[test]
 fn no_committed_value_matches_real_pii_shape() {
-    let hits = scan_fixture_tree_for_patterns(
-        &Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures"),
-        &pii_patterns(),
-    );
+    let hits = scan_fixture_trees_for_patterns(&fixture_roots(), &pii_patterns());
     assert!(hits.is_empty(), "committed PII/secret shapes: {hits:?}");
+}
+
+fn fixture_roots() -> Vec<std::path::PathBuf> {
+    let core_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let crates_root = core_root.parent().expect("auto-core lives under crates");
+    vec![
+        core_root.join("tests/fixtures"),
+        crates_root.join("sim-lib-auto-vehicle/tests/fixtures"),
+    ]
 }
 
 fn pii_patterns() -> Vec<(&'static str, Regex)> {
@@ -41,6 +47,17 @@ fn pii_patterns() -> Vec<(&'static str, Regex)> {
 fn scan_fixture_tree_for_patterns(root: &Path, patterns: &[(&str, Regex)]) -> Vec<String> {
     let mut hits = Vec::new();
     scan_dir(root, patterns, &mut hits);
+    hits
+}
+
+fn scan_fixture_trees_for_patterns(
+    roots: &[std::path::PathBuf],
+    patterns: &[(&str, Regex)],
+) -> Vec<String> {
+    let mut hits = Vec::new();
+    for root in roots {
+        hits.extend(scan_fixture_tree_for_patterns(root, patterns));
+    }
     hits
 }
 

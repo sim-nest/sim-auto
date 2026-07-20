@@ -30,6 +30,13 @@
       "summary": "Modeled automotive diagnostic fabric."
     },
     {
+      "crate_name": "sim_lib_auto_vehicle",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-vehicle/Cargo.toml",
+      "package": "sim-lib-auto-vehicle",
+      "summary": "Vehicle identity lookup and automotive data-source bridge contracts."
+    },
+    {
       "crate_name": "sim_lib_auto_vendor",
       "group": "workspace",
       "manifest": "crates/sim-lib-auto-vendor/Cargo.toml",

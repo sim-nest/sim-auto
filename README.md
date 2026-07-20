@@ -8,6 +8,8 @@ The UDS codec crate turns diagnostic bytes into these same open records without
 shipping vendor fault text or captured shop traces.
 The diagnostic fabric crate serves modeled ECU sites through the kernel fabric
 contract and records replayable synthetic diagnostic replies.
+The vehicle identity crate resolves synthetic plate and VIN labels into shared
+vehicle identities while advertising host-owned data-source contracts.
 The vendor engine crate turns brand manifests into loadable placement sites and
 keeps vendor-facing operations behind an effect gate.
 
@@ -22,6 +24,8 @@ cookies, and vendor tokens.
 - `sim-codec-uds`: UDS and OBD-II byte-frame codec with DTC status-bit decode.
 - `sim-lib-auto-diag`: modeled diagnostic sites, session placement, and
   cassette-backed replay for synthetic ECU reads.
+- `sim-lib-auto-vehicle`: modeled vehicle identity lookup by plate or VIN label,
+  plus HaynesPro and biluppgifter.se bridge contracts gated by `net/http`.
 - `sim-lib-auto-vendor`: manifest-driven vendor sites and warranted dispatch for
   read, reversible, and irreversible automotive operations.
 

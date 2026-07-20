@@ -1,0 +1,8 @@
+# Synthetic vehicle identity fixture values.
+market = "SE"
+plate_alpha = "plate label alpha"
+plate_beta = "plate label beta"
+vin_alpha = "vin label alpha"
+vin_beta = "vin label beta"
+provider_haynespro = "haynespro contract"
+provider_biluppgifter = "biluppgifter contract"

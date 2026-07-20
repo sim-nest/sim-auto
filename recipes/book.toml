@@ -1,0 +1,3 @@
+book = "sim-auto"
+title = "Modeled auto bay recipes"
+summary = "Runnable recipes for the modeled automotive lanes, sites, and work-order story."

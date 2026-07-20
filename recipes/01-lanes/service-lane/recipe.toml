@@ -1,0 +1,8 @@
+id = "auto-lane-service"
+title = "Modeled service lane"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 50
+tags = ["auto", "modeled", "lane", "service"]
+requires = ["sim-lib-auto-order"]

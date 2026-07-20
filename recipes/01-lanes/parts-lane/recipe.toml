@@ -1,0 +1,8 @@
+id = "auto-lane-parts"
+title = "Modeled parts lane"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 40
+tags = ["auto", "modeled", "lane", "parts"]
+requires = ["sim-lib-auto-order"]

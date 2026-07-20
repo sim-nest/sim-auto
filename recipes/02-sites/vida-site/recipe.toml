@@ -1,0 +1,8 @@
+id = "auto-site-vida"
+title = "Modeled VIDA site"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 130
+tags = ["auto", "modeled", "site", "vida"]
+requires = ["sim-lib-auto-order"]

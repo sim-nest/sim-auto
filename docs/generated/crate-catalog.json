@@ -1,7 +1,20 @@
 {
   "generator": "xtask crate-catalog v1",
-  "package_count": 6,
+  "package_count": 12,
   "packages": [
+    {
+      "description": "Bootloader-backed automotive bay command surface for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-auto/Cargo.toml",
+      "name": "sim-auto",
+      "publish": "true",
+      "readme": "crates/sim-auto/README.md",
+      "root": "crates/sim-auto",
+      "target_kinds": [
+        "bin",
+        "lib"
+      ]
+    },
     {
       "description": "UDS and OBD-II byte-frame codec for SIM automotive diagnostics.",
       "generated_readme": false,
@@ -42,6 +55,55 @@
       ]
     },
     {
+      "description": "Modeled automotive repair-information documents for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-info/Cargo.toml",
+      "name": "sim-lib-auto-info",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-info/README.md",
+      "root": "crates/sim-lib-auto-info",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Ledgered modeled automotive work-order sessions for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-order/Cargo.toml",
+      "name": "sim-lib-auto-order",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-order/README.md",
+      "root": "crates/sim-lib-auto-order",
+      "target_kinds": [
+        "lib",
+        "test"
+      ]
+    },
+    {
+      "description": "Modeled automotive parts catalog lookup and supplier ordering for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-parts/Cargo.toml",
+      "name": "sim-lib-auto-parts",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-parts/README.md",
+      "root": "crates/sim-lib-auto-parts",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Modeled vehicle identity lookup and automotive data-source bridge contracts for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-vehicle/Cargo.toml",
+      "name": "sim-lib-auto-vehicle",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-vehicle/README.md",
+      "root": "crates/sim-lib-auto-vehicle",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
       "description": "Manifest-driven automotive vendor site engine for SIM.",
       "generated_readme": false,
       "manifest": "crates/sim-lib-auto-vendor/Cargo.toml",
@@ -49,6 +111,18 @@
       "publish": "true",
       "readme": "crates/sim-lib-auto-vendor/README.md",
       "root": "crates/sim-lib-auto-vendor",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Automotive bay Scene and Intent surface for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-view-bay/Cargo.toml",
+      "name": "sim-lib-view-bay",
+      "publish": "true",
+      "readme": "crates/sim-lib-view-bay/README.md",
+      "root": "crates/sim-lib-view-bay",
       "target_kinds": [
         "lib"
       ]

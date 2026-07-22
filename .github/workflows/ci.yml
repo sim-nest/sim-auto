@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - run: |
           git clone https://github.com/sim-nest/sim-tooling ../sim-tooling
           git -C ../sim-tooling checkout d1e9f3ea6861b3b2b1cfd142124c4556de1a0c74

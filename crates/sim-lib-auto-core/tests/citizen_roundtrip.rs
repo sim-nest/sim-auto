@@ -1,7 +1,5 @@
-use std::sync::Arc;
-
 use sim_citizen::check_fixture;
-use sim_kernel::{CapabilityName, Cx, DefaultFactory, Expr, Lib, NoopEvalPolicy, Symbol};
+use sim_kernel::{CapabilityName, Expr, Lib, Symbol, testing::bare_cx as cx};
 
 use sim_lib_auto_core::{
     AUTO_DIAGNOSTICS_READ, AUTO_FLASH, AUTO_ORDER, AUTO_SERVICE_WRITE, AUTO_TRANSPORT_CONNECT,
@@ -172,10 +170,6 @@ fn modeled_flash_backup_flash_restore_round_trips_stock_bytes() {
     let restored = session.restore(&backup).unwrap();
     assert_eq!(restored, stock);
     assert_eq!(session.read_ecu(), restored.as_slice());
-}
-
-fn cx() -> Cx {
-    Cx::new(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory))
 }
 
 fn assert_expected_citizens_registered() {

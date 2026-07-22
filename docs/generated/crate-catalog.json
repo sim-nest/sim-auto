@@ -1,7 +1,20 @@
 {
   "generator": "xtask crate-catalog v1",
-  "package_count": 6,
+  "package_count": 29,
   "packages": [
+    {
+      "description": "Bootloader-backed automotive bay command surface for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-auto/Cargo.toml",
+      "name": "sim-auto",
+      "publish": "true",
+      "readme": "crates/sim-auto/README.md",
+      "root": "crates/sim-auto",
+      "target_kinds": [
+        "bin",
+        "lib"
+      ]
+    },
     {
       "description": "UDS and OBD-II byte-frame codec for SIM automotive diagnostics.",
       "generated_readme": false,
@@ -42,6 +55,55 @@
       ]
     },
     {
+      "description": "Modeled automotive repair-information documents for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-info/Cargo.toml",
+      "name": "sim-lib-auto-info",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-info/README.md",
+      "root": "crates/sim-lib-auto-info",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Ledgered modeled automotive work-order sessions for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-order/Cargo.toml",
+      "name": "sim-lib-auto-order",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-order/README.md",
+      "root": "crates/sim-lib-auto-order",
+      "target_kinds": [
+        "lib",
+        "test"
+      ]
+    },
+    {
+      "description": "Modeled automotive parts catalog lookup and supplier ordering for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-parts/Cargo.toml",
+      "name": "sim-lib-auto-parts",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-parts/README.md",
+      "root": "crates/sim-lib-auto-parts",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Modeled vehicle identity lookup and automotive data-source bridge contracts for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-auto-vehicle/Cargo.toml",
+      "name": "sim-lib-auto-vehicle",
+      "publish": "true",
+      "readme": "crates/sim-lib-auto-vehicle/README.md",
+      "root": "crates/sim-lib-auto-vehicle",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
       "description": "Manifest-driven automotive vendor site engine for SIM.",
       "generated_readme": false,
       "manifest": "crates/sim-lib-auto-vendor/Cargo.toml",
@@ -54,6 +116,210 @@
       ]
     },
     {
+      "description": "Automotive bay Scene and Intent surface for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-view-bay/Cargo.toml",
+      "name": "sim-lib-view-bay",
+      "publish": "true",
+      "readme": "crates/sim-lib-view-bay/README.md",
+      "root": "crates/sim-lib-view-bay",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Runnable modeled work-order recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/00-overview/modeled-work-order/Cargo.toml",
+      "name": "auto-modeled-work-order",
+      "publish": "false",
+      "readme": "recipes/00-overview/modeled-work-order/README.md",
+      "root": "recipes/00-overview/modeled-work-order",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled flash lane recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/01-lanes/flash-lane/Cargo.toml",
+      "name": "auto-lane-flash",
+      "publish": "false",
+      "readme": "recipes/01-lanes/flash-lane/README.md",
+      "root": "recipes/01-lanes/flash-lane",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled information lane recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/01-lanes/info-lane/Cargo.toml",
+      "name": "auto-lane-info",
+      "publish": "false",
+      "readme": "recipes/01-lanes/info-lane/README.md",
+      "root": "recipes/01-lanes/info-lane",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled supplier-order lane recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/01-lanes/order-lane/Cargo.toml",
+      "name": "auto-lane-order",
+      "publish": "false",
+      "readme": "recipes/01-lanes/order-lane/README.md",
+      "root": "recipes/01-lanes/order-lane",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled parts lane recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/01-lanes/parts-lane/Cargo.toml",
+      "name": "auto-lane-parts",
+      "publish": "false",
+      "readme": "recipes/01-lanes/parts-lane/README.md",
+      "root": "recipes/01-lanes/parts-lane",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled read lane recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/01-lanes/read-lane/Cargo.toml",
+      "name": "auto-lane-read",
+      "publish": "false",
+      "readme": "recipes/01-lanes/read-lane/README.md",
+      "root": "recipes/01-lanes/read-lane",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled service lane recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/01-lanes/service-lane/Cargo.toml",
+      "name": "auto-lane-service",
+      "publish": "false",
+      "readme": "recipes/01-lanes/service-lane/README.md",
+      "root": "recipes/01-lanes/service-lane",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled Autotuner site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/autotuner-site/Cargo.toml",
+      "name": "auto-site-autotuner",
+      "publish": "false",
+      "readme": "recipes/02-sites/autotuner-site/README.md",
+      "root": "recipes/02-sites/autotuner-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled biluppgifter.se site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/biluppgifter-se-site/Cargo.toml",
+      "name": "auto-site-biluppgifter-se",
+      "publish": "false",
+      "readme": "recipes/02-sites/biluppgifter-se-site/README.md",
+      "root": "recipes/02-sites/biluppgifter-se-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled ESItronic site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/esitronic-site/Cargo.toml",
+      "name": "auto-site-esitronic",
+      "publish": "false",
+      "readme": "recipes/02-sites/esitronic-site/README.md",
+      "root": "recipes/02-sites/esitronic-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled HaynesPro site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/haynespro-site/Cargo.toml",
+      "name": "auto-site-haynespro",
+      "publish": "false",
+      "readme": "recipes/02-sites/haynespro-site/README.md",
+      "root": "recipes/02-sites/haynespro-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled ISTA site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/ista-site/Cargo.toml",
+      "name": "auto-site-ista",
+      "publish": "false",
+      "readme": "recipes/02-sites/ista-site/README.md",
+      "root": "recipes/02-sites/ista-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled Mekonomen Pro site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/mekonomen-pro-site/Cargo.toml",
+      "name": "auto-site-mekonomen-pro",
+      "publish": "false",
+      "readme": "recipes/02-sites/mekonomen-pro-site/README.md",
+      "root": "recipes/02-sites/mekonomen-pro-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled ODIS site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/odis-site/Cargo.toml",
+      "name": "auto-site-odis",
+      "publish": "false",
+      "readme": "recipes/02-sites/odis-site/README.md",
+      "root": "recipes/02-sites/odis-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled VIDA site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/vida-site/Cargo.toml",
+      "name": "auto-site-vida",
+      "publish": "false",
+      "readme": "recipes/02-sites/vida-site/README.md",
+      "root": "recipes/02-sites/vida-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "Runnable modeled XENTRY site recipe for sim-auto.",
+      "generated_readme": false,
+      "manifest": "recipes/02-sites/xentry-site/Cargo.toml",
+      "name": "auto-site-xentry",
+      "publish": "false",
+      "readme": "recipes/02-sites/xentry-site/README.md",
+      "root": "recipes/02-sites/xentry-site",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
       "description": "Runnable recipe for sim-auto core citizens.",
       "generated_readme": false,
       "manifest": "recipes/auto-core-citizens/Cargo.toml",
@@ -63,6 +329,18 @@
       "root": "recipes/auto-core-citizens",
       "target_kinds": [
         "bin"
+      ]
+    },
+    {
+      "description": "Shared support for runnable sim-auto recipes.",
+      "generated_readme": true,
+      "manifest": "recipes/auto-recipe-support/Cargo.toml",
+      "name": "auto-recipe-support",
+      "publish": "false",
+      "readme": "recipes/auto-recipe-support/README.md",
+      "root": "recipes/auto-recipe-support",
+      "target_kinds": [
+        "lib"
       ]
     },
     {

@@ -9,6 +9,91 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "auto-lane-flash"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-lane-info"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-lane-order"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-lane-parts"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-lane-read"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-lane-service"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-modeled-work-order"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-recipe-support"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-autotuner"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-biluppgifter-se"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-esitronic"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-haynespro"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-ista"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-mekonomen-pro"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-odis"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-vida"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "auto-site-xentry"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-auto"
     },
     {
@@ -30,6 +115,11 @@
       "features": [],
       "group": "workspace",
       "package": "sim-lib-auto-info"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-auto-order"
     },
     {
       "features": [],

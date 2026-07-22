@@ -1,0 +1,15 @@
+[package]
+name = "auto-lane-service"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Runnable modeled service lane recipe for sim-auto."
+readme = "README.md"
+publish = false
+
+[dependencies]
+auto-recipe-support = { path = "../../auto-recipe-support" }
+sim-kernel = "0.1.0"
+
+[lints]
+workspace = true

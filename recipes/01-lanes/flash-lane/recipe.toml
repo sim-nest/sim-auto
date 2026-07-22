@@ -1,0 +1,8 @@
+id = "auto-lane-flash"
+title = "Modeled flash lane"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 70
+tags = ["auto", "modeled", "lane", "flash"]
+requires = ["sim-lib-auto-order"]

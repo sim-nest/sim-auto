@@ -9,6 +9,125 @@
       "summary": "Runnable recipe for sim-auto core citizens."
     },
     {
+      "crate_name": "auto-lane-flash",
+      "group": "workspace",
+      "manifest": "recipes/01-lanes/flash-lane/Cargo.toml",
+      "package": "auto-lane-flash",
+      "summary": "Runnable modeled flash lane recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-lane-info",
+      "group": "workspace",
+      "manifest": "recipes/01-lanes/info-lane/Cargo.toml",
+      "package": "auto-lane-info",
+      "summary": "Runnable modeled information lane recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-lane-order",
+      "group": "workspace",
+      "manifest": "recipes/01-lanes/order-lane/Cargo.toml",
+      "package": "auto-lane-order",
+      "summary": "Runnable modeled supplier-order lane recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-lane-parts",
+      "group": "workspace",
+      "manifest": "recipes/01-lanes/parts-lane/Cargo.toml",
+      "package": "auto-lane-parts",
+      "summary": "Runnable modeled parts lane recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-lane-read",
+      "group": "workspace",
+      "manifest": "recipes/01-lanes/read-lane/Cargo.toml",
+      "package": "auto-lane-read",
+      "summary": "Runnable modeled read lane recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-lane-service",
+      "group": "workspace",
+      "manifest": "recipes/01-lanes/service-lane/Cargo.toml",
+      "package": "auto-lane-service",
+      "summary": "Runnable modeled service lane recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-modeled-work-order",
+      "group": "workspace",
+      "manifest": "recipes/00-overview/modeled-work-order/Cargo.toml",
+      "package": "auto-modeled-work-order",
+      "summary": "Runnable modeled work-order recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto_recipe_support",
+      "group": "workspace",
+      "manifest": "recipes/auto-recipe-support/Cargo.toml",
+      "package": "auto-recipe-support",
+      "summary": "Shared support for runnable sim-auto recipes."
+    },
+    {
+      "crate_name": "auto-site-autotuner",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/autotuner-site/Cargo.toml",
+      "package": "auto-site-autotuner",
+      "summary": "Runnable modeled Autotuner site recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-site-biluppgifter-se",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/biluppgifter-se-site/Cargo.toml",
+      "package": "auto-site-biluppgifter-se",
+      "summary": "Runnable modeled biluppgifter.se site recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-site-esitronic",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/esitronic-site/Cargo.toml",
+      "package": "auto-site-esitronic",
+      "summary": "Runnable modeled ESItronic site recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-site-haynespro",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/haynespro-site/Cargo.toml",
+      "package": "auto-site-haynespro",
+      "summary": "Runnable modeled HaynesPro site recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-site-ista",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/ista-site/Cargo.toml",
+      "package": "auto-site-ista",
+      "summary": "Runnable modeled ISTA site recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-site-mekonomen-pro",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/mekonomen-pro-site/Cargo.toml",
+      "package": "auto-site-mekonomen-pro",
+      "summary": "Runnable modeled Mekonomen Pro site recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-site-odis",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/odis-site/Cargo.toml",
+      "package": "auto-site-odis",
+      "summary": "Runnable modeled ODIS site recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-site-vida",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/vida-site/Cargo.toml",
+      "package": "auto-site-vida",
+      "summary": "Runnable modeled VIDA site recipe for sim-auto."
+    },
+    {
+      "crate_name": "auto-site-xentry",
+      "group": "workspace",
+      "manifest": "recipes/02-sites/xentry-site/Cargo.toml",
+      "package": "auto-site-xentry",
+      "summary": "Runnable modeled XENTRY site recipe for sim-auto."
+    },
+    {
       "crate_name": "sim_auto",
       "group": "workspace",
       "manifest": "crates/sim-auto/Cargo.toml",
@@ -42,6 +161,13 @@
       "manifest": "crates/sim-lib-auto-info/Cargo.toml",
       "package": "sim-lib-auto-info",
       "summary": "Modeled automotive repair-information documents."
+    },
+    {
+      "crate_name": "sim_lib_auto_order",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-auto-order/Cargo.toml",
+      "package": "sim-lib-auto-order",
+      "summary": "Ledgered modeled automotive work-order sessions."
     },
     {
       "crate_name": "sim_lib_auto_parts",

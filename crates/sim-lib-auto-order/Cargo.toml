@@ -1,0 +1,24 @@
+[package]
+name = "sim-lib-auto-order"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Ledgered modeled automotive work-order sessions for SIM."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-auto"
+homepage = "https://github.com/sim-nest/sim-auto"
+
+[dependencies]
+sim-citizen = { version = "0.1.0" }
+sim-citizen-derive = { version = "0.1.0" }
+sim-kernel = { version = "0.1.4" }
+sim-lib-auto-core = { version = "0.1.0", path = "../sim-lib-auto-core" }
+sim-lib-auto-parts = { version = "0.1.0", path = "../sim-lib-auto-parts" }
+sim-lib-auto-vendor = { version = "0.1.0", path = "../sim-lib-auto-vendor" }
+
+[dev-dependencies]
+sim-kernel = { version = "0.1.4", features = ["test-support"] }
+
+[lints]
+workspace = true

@@ -1,0 +1,8 @@
+id = "auto-site-odis"
+title = "Modeled ODIS site"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 140
+tags = ["auto", "modeled", "site", "odis"]
+requires = ["sim-lib-auto-order"]

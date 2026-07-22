@@ -1,0 +1,16 @@
+[package]
+name = "auto-recipe-support"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+readme = "README.md"
+description = "Shared support for runnable sim-auto recipes."
+publish = false
+
+[dependencies]
+sim-kernel = "0.1.0"
+sim-lib-auto-core = { path = "../../crates/sim-lib-auto-core" }
+sim-lib-auto-order = { path = "../../crates/sim-lib-auto-order" }
+
+[lints]
+workspace = true

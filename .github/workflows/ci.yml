@@ -7,13 +7,16 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      SIMDOC_TOOLING_MANIFEST: ${{ github.workspace }}/sim-tooling/Cargo.toml
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - run: |
-          git clone https://github.com/sim-nest/sim-tooling ../sim-tooling
-          git -C ../sim-tooling checkout d1e9f3ea6861b3b2b1cfd142124c4556de1a0c74
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-tooling
+          path: sim-tooling
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -28,4 +31,4 @@ jobs:
       - run: cargo test --workspace --all-features
       - run: cargo run -p xtask -- simdoc --check
         env:
-          SIMDOC_TOOLING_MANIFEST: ${{ github.workspace }}/../sim-tooling/Cargo.toml
+          SIMDOC_TOOLING_MANIFEST: ${{ github.workspace }}/sim-tooling/Cargo.toml

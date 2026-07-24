@@ -118,10 +118,10 @@ pub(crate) fn parse_vendor_request(
         .remove("args")
         .unwrap_or_else(|| Expr::Map(Vec::new()));
     let reversal_artifact = fields.remove("reversal");
-    let warrant = fields
-        .remove("warrant")
-        .map(|expr| Ok(VendorWarrant::new(string_value(&expr)?, "manifest request")))
-        .transpose()?;
+    let warrant = match fields.remove("warrant") {
+        Some(expr) => Some(VendorWarrant::new(string_value(&expr)?, "manifest request")),
+        None => None,
+    };
     let human_approved = fields
         .remove("human-approved")
         .map(|expr| bool_value(&expr))

@@ -9,7 +9,7 @@ publish = false
 
 [dependencies]
 auto-recipe-support = { path = "../../auto-recipe-support" }
-sim-kernel = "0.1.0"
+sim-kernel = "0.2.0"
 
 [lints]
 workspace = true

@@ -1,0 +1,99 @@
+schema = "sim.features"
+
+[enforcement.audience]
+code = "strict"
+framework = "strict"
+
+[enforcement.specimen]
+user = "strict"
+framework = "strict"
+code = "advisory"
+
+[enforcement.route]
+major_entrypoints = "advisory"
+frameworks = "advisory"
+
+[[feature]]
+id = "feature/sim-auto/generated-docs"
+title = "Repository documentation surface"
+summary = "Publish generated package, card, rustdoc, and Index facts for the automotive runtime and recipes."
+owner = "crate/xtask"
+audiences = ["code"]
+guidance = "Use this row when checking the generated documentation and Index lane for automotive support."
+claims_anchors = [
+  "anchor/cli/xtask",
+  "anchor/crate/xtask",
+  "anchor/doc/generated/card-index",
+  "anchor/doc/generated/feature-map",
+  "anchor/doc/generated/provenance",
+  "anchor/doc/generated/repo-contract",
+  "anchor/doc/generated/rustdoc-index",
+  "anchor/doc/generated/sim-index-fragment",
+  "anchor/repo/sim-auto",
+]
+claims_surfaces = [
+  "cli/xtask",
+  "docs/sim-auto/generated",
+]
+
+[[feature]]
+id = "feature/sim-auto/automotive-runtime"
+title = "Automotive diagnostic and service framework"
+summary = "Load bounded automotive diagnostics, vehicle information, parts, service ordering, vendor access, UDS codecs, and bay views through one runtime family."
+owner = "crate/sim-lib-auto-core"
+audiences = ["code", "framework", "user"]
+guidance = "Use the automotive libraries for modeled or site-backed vehicle workflows. Keep UDS framing in sim-codec-uds, shared runtime contracts in sim-lib-auto-core, and lane-specific behavior in its owning auto library."
+claims_anchors = [
+  "anchor/crate/auto-core-citizens",
+  "anchor/crate/auto-lane-flash",
+  "anchor/crate/auto-lane-info",
+  "anchor/crate/auto-lane-order",
+  "anchor/crate/auto-lane-parts",
+  "anchor/crate/auto-lane-read",
+  "anchor/crate/auto-lane-service",
+  "anchor/crate/auto-modeled-work-order",
+  "anchor/crate/auto-recipe-support",
+  "anchor/crate/auto-site-autotuner",
+  "anchor/crate/auto-site-biluppgifter-se",
+  "anchor/crate/auto-site-esitronic",
+  "anchor/crate/auto-site-haynespro",
+  "anchor/crate/auto-site-ista",
+  "anchor/crate/auto-site-mekonomen-pro",
+  "anchor/crate/auto-site-odis",
+  "anchor/crate/auto-site-vida",
+  "anchor/crate/auto-site-xentry",
+  "anchor/crate/sim-auto",
+  "anchor/crate/sim-codec-uds",
+  "anchor/crate/sim-lib-auto-core",
+  "anchor/crate/sim-lib-auto-diag",
+  "anchor/crate/sim-lib-auto-info",
+  "anchor/crate/sim-lib-auto-order",
+  "anchor/crate/sim-lib-auto-parts",
+  "anchor/crate/sim-lib-auto-vehicle",
+  "anchor/crate/sim-lib-auto-vendor",
+  "anchor/crate/sim-lib-view-bay",
+  "anchor/export/sim-auto/cli/main/auto",
+  "anchor/export/sim-auto/codec/lisp",
+  "anchor/runtime-lib/sim-auto/auto-cli-lib",
+  "anchor/runtime-lib/sim-codec-uds/uds-codec-lib",
+  "anchor/runtime-lib/sim-lib-auto-core/auto-core-lib",
+  "anchor/runtime-lib/sim-lib-auto-diag/auto-diag-lib",
+  "anchor/runtime-lib/sim-lib-auto-info/auto-info-lib",
+  "anchor/runtime-lib/sim-lib-auto-order/auto-order-lib",
+  "anchor/runtime-lib/sim-lib-auto-parts/auto-parts-lib",
+  "anchor/runtime-lib/sim-lib-auto-vehicle/auto-vehicle-lib",
+  "anchor/runtime-lib/sim-lib-auto-vendor/auto-vendor-lib",
+]
+claims_specimens = [
+  "spec-test/sim-auto/crates/sim-lib-auto-order/src/conformance",
+  "spec-test/sim-auto/crates/sim-lib-auto-order/tests/conformance",
+]
+
+[[route]]
+id = "route/add-automotive-workflow"
+task = "Add an automotive diagnostic or service workflow"
+audiences = ["code", "framework", "user"]
+steps = [
+  { feature = "feature/sim-auto/automotive-runtime", why = "The automotive runtime row owns the shared contracts, bounded lanes, codec, and view integration." },
+  { specimen = "spec-test/sim-auto/crates/sim-lib-auto-order/tests/conformance", why = "The conformance specimen checks the order boundary through the public runtime contract." },
+]

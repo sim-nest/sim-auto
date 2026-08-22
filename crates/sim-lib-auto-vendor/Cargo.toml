@@ -13,6 +13,7 @@ homepage = "https://github.com/sim-nest/sim-auto"
 sim-kernel = { version = "0.2.0" }
 sim-lib-auto-core = { version = "0.2.0", path = "../sim-lib-auto-core" }
 sim-lib-stream-fabric = { version = "0.2.0" }
+sim-lib-operation-gate = { version = "0.1.0" }
 sim-citizen = { version = "0.2.0" }
 sim-citizen-derive = { version = "0.2.0" }
 

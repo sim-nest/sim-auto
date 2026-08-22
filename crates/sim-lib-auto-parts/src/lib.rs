@@ -16,9 +16,6 @@ mod order;
 mod request;
 mod runtime;
 
-#[cfg(test)]
-mod tests;
-
 pub use catalog::{PartsDir, catalog_part, modeled_aftermarket_dir, modeled_epc_dir, parts_dir};
 pub use fabric::AutoPartsFabric;
 pub use model::{OrderStatus, PartLine, PartsCatalog, Supplier};

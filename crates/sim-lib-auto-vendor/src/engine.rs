@@ -4,12 +4,15 @@ use std::sync::Arc;
 
 use sim_kernel::{
     CORE_LOCAL_EVAL_FABRIC_CLASS_ID, ClassRef, Consistency, Cx, Error, EvalFabric, EvalMode,
-    EvalReply, EvalRequest, Object, ObjectCompat, Result, Symbol,
+    EvalReply, EvalRequest, Object, ObjectCompat, Result, Symbol, ref_resolver::value_from_ref,
 };
 use sim_lib_auto_core::SiteManifest;
 use sim_lib_stream_fabric::{EffectLedgerCassette, EvalCassette, LedgeredRelayFabric};
 
-use crate::{VendorBridge, VendorGateLedger, request::parse_vendor_request, warranted_effect};
+use crate::{
+    AutomotiveApprovalUse, AutomotiveGateRecords, VendorBridge, guard_vendor_operation,
+    manifest_operation, request::parse_vendor_request,
+};
 
 /// Replay wrapper used for cassette-backed vendor sessions.
 pub type VendorReplayFabric = LedgeredRelayFabric<VendorSiteFabric>;
@@ -24,25 +27,32 @@ pub type VendorReplayFabric = LedgeredRelayFabric<VendorSiteFabric>;
 pub struct VendorSiteFabric {
     manifest: SiteManifest,
     bridge: Arc<dyn VendorBridge>,
-    gate_ledger: Arc<VendorGateLedger>,
+    gate_records: Arc<AutomotiveGateRecords>,
+    approval_use: Arc<AutomotiveApprovalUse>,
 }
 
 impl VendorSiteFabric {
     /// Builds a vendor site fabric from a manifest and bridge.
     pub fn new(manifest: SiteManifest, bridge: Arc<dyn VendorBridge>) -> Self {
-        Self::with_gate_ledger(manifest, bridge, Arc::new(VendorGateLedger::new()))
+        Self {
+            manifest,
+            bridge,
+            gate_records: Arc::new(AutomotiveGateRecords::new()),
+            approval_use: Arc::new(AutomotiveApprovalUse::new()),
+        }
     }
 
     /// Builds a vendor site fabric with an explicit gate ledger.
-    pub fn with_gate_ledger(
+    pub fn with_gate_records(
         manifest: SiteManifest,
         bridge: Arc<dyn VendorBridge>,
-        gate_ledger: Arc<VendorGateLedger>,
+        gate_records: Arc<AutomotiveGateRecords>,
     ) -> Self {
         Self {
             manifest,
             bridge,
-            gate_ledger,
+            gate_records,
+            approval_use: Arc::new(AutomotiveApprovalUse::new()),
         }
     }
 
@@ -52,8 +62,8 @@ impl VendorSiteFabric {
     }
 
     /// Returns the gate ledger.
-    pub fn gate_ledger(&self) -> &Arc<VendorGateLedger> {
-        &self.gate_ledger
+    pub fn gate_records(&self) -> &Arc<AutomotiveGateRecords> {
+        &self.gate_records
     }
 }
 
@@ -62,15 +72,17 @@ impl EvalFabric for VendorSiteFabric {
         validate_request_controls(&request)?;
         let bridge_request = parse_vendor_request(&self.manifest, &request.expr)?;
         let trace = request.trace;
-        let expr = warranted_effect(
+        cx.require_all(&request.required_capabilities)?;
+        let operation = manifest_operation(&self.manifest, &bridge_request.op)?;
+        let reference = guard_vendor_operation(
             cx,
-            &self.manifest,
-            bridge_request,
-            &request.required_capabilities,
-            &self.gate_ledger,
+            &bridge_request,
+            &operation,
+            &self.gate_records,
+            &self.approval_use,
             self.bridge.as_ref(),
         )?;
-        let value = cx.factory().expr(expr)?;
+        let value = value_from_ref(cx, &reference)?;
         Ok(EvalReply {
             value,
             diagnostics: cx.take_diagnostics(),

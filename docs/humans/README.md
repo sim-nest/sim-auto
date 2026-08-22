@@ -42,7 +42,6 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `cli/auto-site-odis` | `cli` | `crate/auto-site-odis` |
 | `cli/auto-site-vida` | `cli` | `crate/auto-site-vida` |
 | `cli/auto-site-xentry` | `cli` | `crate/auto-site-xentry` |
-| `cli/sim-auto` | `cli` | `crate/sim-auto` |
 | `cli/xtask` | `cli` | `crate/xtask` |
 | `docs/sim-auto/generated` | `docs` | `doc-set/sim-auto/generated` |
 | `model/auto-modeled-work-order` | `model-exchange` | `crate/auto-modeled-work-order` |

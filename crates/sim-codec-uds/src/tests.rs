@@ -93,7 +93,11 @@ fn rejects_unknown_service() {
 }
 
 fn test_context() -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x9ded_4bd3_6560_1122),
+    );
     install_uds_codec_lib(&mut cx).unwrap();
     cx
 }

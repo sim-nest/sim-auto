@@ -81,6 +81,7 @@ pub fn guard_vendor_operation(
     bridge: &dyn VendorBridge,
 ) -> Result<Ref> {
     let effect = Effect::new(
+        cx.fresh_handle(),
         Symbol::qualified("auto", "vendor-effect"),
         operation.declaration.subject.clone(),
         input_ref(cx, request)?,

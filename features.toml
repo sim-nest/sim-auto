@@ -70,7 +70,6 @@ claims_anchors = [
   "anchor/crate/sim-lib-auto-order",
   "anchor/crate/sim-lib-auto-parts",
   "anchor/crate/sim-lib-auto-vehicle",
-  "anchor/crate/sim-lib-auto-vendor",
   "anchor/crate/sim-lib-view-bay",
   "anchor/export/sim-auto/cli/main/auto",
   "anchor/export/sim-auto/codec/lisp",
@@ -106,5 +105,5 @@ owner = "crate/sim-lib-auto-vendor"
 audiences = ["code", "framework"]
 guidance = "Author an OpCap for every vendor operation and dispatch through guard_vendor_operation. Keep approval verification/use and record sinks as adapters; do not infer gate policy from operation names or reintroduce an automotive gate implementation."
 claims_anchors = ["anchor/crate/sim-lib-auto-vendor"]
-claims_specimens = ["spec-test/sim-auto/crates/sim-lib-auto-order/src/conformance"]
+claims_specimens = ["spec-test/sim-auto/crates/sim-lib-auto-vendor/src/gate_tests"]
 composes = ["crate/sim-lib-operation-gate"]

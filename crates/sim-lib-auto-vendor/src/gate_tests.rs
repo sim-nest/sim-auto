@@ -1,3 +1,5 @@
+// conformance: vendor operations cross only the generic reviewed operation gate.
+
 use std::sync::Arc;
 
 use sim_kernel::{CapabilityName, Expr};

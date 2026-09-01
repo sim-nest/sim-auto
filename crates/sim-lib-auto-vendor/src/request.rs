@@ -5,7 +5,8 @@ use std::collections::BTreeMap;
 use sim_kernel::{Error, Expr, Result, Symbol};
 use sim_lib_auto_core::{SiteManifest, VehicleId};
 
-use crate::{VendorWarrant, manifest_operation};
+use crate::manifest_operation;
+use sim_lib_operation_gate::{Approval, ApprovalDecision};
 
 /// Request sent from a manifest site to a vendor bridge.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -22,10 +23,8 @@ pub struct VendorBridgeRequest {
     pub args: Expr,
     /// Reversal artifact required for irreversible operations.
     pub reversal_artifact: Option<Expr>,
-    /// Warrant required for irreversible operations.
-    pub warrant: Option<VendorWarrant>,
-    /// Human gate for irreversible operations.
-    pub human_approved: bool,
+    /// Exact approval required for reviewed operations.
+    pub approval: Option<Approval>,
 }
 
 impl VendorBridgeRequest {
@@ -44,8 +43,7 @@ impl VendorBridgeRequest {
             vehicle,
             args,
             reversal_artifact: None,
-            warrant: None,
-            human_approved: false,
+            approval: None,
         }
     }
 
@@ -55,15 +53,9 @@ impl VendorBridgeRequest {
         self
     }
 
-    /// Attaches a warrant.
-    pub fn with_warrant(mut self, warrant: VendorWarrant) -> Self {
-        self.warrant = Some(warrant);
-        self
-    }
-
-    /// Opens or closes the human gate.
-    pub fn with_human_approval(mut self, approved: bool) -> Self {
-        self.human_approved = approved;
+    /// Attaches exact approval evidence.
+    pub fn with_approval(mut self, approval: Approval) -> Self {
+        self.approval = Some(approval);
         self
     }
 }
@@ -118,10 +110,15 @@ pub(crate) fn parse_vendor_request(
         .remove("args")
         .unwrap_or_else(|| Expr::Map(Vec::new()));
     let reversal_artifact = fields.remove("reversal");
-    let warrant = match fields.remove("warrant") {
-        Some(expr) => Some(VendorWarrant::new(string_value(&expr)?, "manifest request")),
-        None => None,
-    };
+    let approval = fields
+        .remove("warrant")
+        .map(|expr| string_value(&expr))
+        .transpose()?
+        .map(|id| Approval {
+            id,
+            subject: operation.declaration.subject.clone(),
+            decision: ApprovalDecision::Approve,
+        });
     let human_approved = fields
         .remove("human-approved")
         .map(|expr| bool_value(&expr))
@@ -130,15 +127,14 @@ pub(crate) fn parse_vendor_request(
 
     Ok(
         VendorBridgeRequest::new(manifest.site.clone(), operation.lane, op, vehicle, args)
-            .with_human_approval(human_approved)
             .with_optional_reversal(reversal_artifact)
-            .with_optional_warrant(warrant),
+            .with_optional_approval(if human_approved { approval } else { None }),
     )
 }
 
 trait OptionalGate {
     fn with_optional_reversal(self, artifact: Option<Expr>) -> Self;
-    fn with_optional_warrant(self, warrant: Option<VendorWarrant>) -> Self;
+    fn with_optional_approval(self, approval: Option<Approval>) -> Self;
 }
 
 impl OptionalGate for VendorBridgeRequest {
@@ -147,8 +143,8 @@ impl OptionalGate for VendorBridgeRequest {
         self
     }
 
-    fn with_optional_warrant(mut self, warrant: Option<VendorWarrant>) -> Self {
-        self.warrant = warrant;
+    fn with_optional_approval(mut self, approval: Option<Approval>) -> Self {
+        self.approval = approval;
         self
     }
 }

@@ -19,6 +19,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | --- | --- | ---: | --- |
 | `feature/sim-auto/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, rustdoc, and Index facts for the automotive runtime and recipes. |
 | `feature/sim-auto/automotive-runtime` | `crate/sim-lib-auto-core` | 2 | Load bounded automotive diagnostics, vehicle information, parts, service ordering, vendor access, UDS codecs, and bay views through one runtime family. |
+| `feature/sim-auto/guarded-vendor-operations` | `crate/sim-lib-auto-vendor` | 1 | Adapt explicit automotive manifest declarations to the domain-neutral operation gate with exact approval and replay-safe dispatch. |
 
 ## Surfaces
 
@@ -42,7 +43,6 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `cli/auto-site-odis` | `cli` | `crate/auto-site-odis` |
 | `cli/auto-site-vida` | `cli` | `crate/auto-site-vida` |
 | `cli/auto-site-xentry` | `cli` | `crate/auto-site-xentry` |
-| `cli/sim-auto` | `cli` | `crate/sim-auto` |
 | `cli/xtask` | `cli` | `crate/xtask` |
 | `docs/sim-auto/generated` | `docs` | `doc-set/sim-auto/generated` |
 | `model/auto-modeled-work-order` | `model-exchange` | `crate/auto-modeled-work-order` |
@@ -154,12 +154,13 @@ use sim_lib_auto_core::{
 };
 use sim_lib_auto_parts::{OrderStatus, Supplier};
 use sim_lib_auto_vendor::{
-    ModeledVendorBridge, VendorEffectClass, VendorGateLedger, VendorSiteFabric, autotuner_manifest,
+    AutomotiveGateRecords, ModeledVendorBridge, VendorSiteFabric, autotuner_manifest,
     biluppgifter_se_manifest, esitronic_manifest, flash_site_cassettes, haynespro_manifest,
     ista_manifest, manifest_operation, mekonomen_pro_manifest, odis_manifest, oem_site_cassettes,
     supplier_site_cassettes, vendor_irreversible_request_expr, vendor_request_expr, vida_manifest,
     xentry_manifest,
 };
+use sim_lib_operation_gate::ExecutionMode;
 
 use crate::{
     ConformanceReport, LedgerInvoiceExport, WorkOrder, WorkOrderEvent, model::WorkOrderEventInput,
@@ -268,19 +269,23 @@ impl ModeledWorkOrderEngine {
         delegation_violations: &mut Vec<String>,
     ) -> Result<()> {
         let bridge = Arc::new(ModeledVendorBridge::with_cassettes(all_cassettes()));
-        let gate_ledger = Arc::new(VendorGateLedger::new());
-        let fabric = VendorSiteFabric::with_gate_ledger(
+        let gate_records = Arc::new(AutomotiveGateRecords::new());
+        let fabric = VendorSiteFabric::with_gate_records(
             story.manifest.clone(),
             bridge,
-            Arc::clone(&gate_ledger),
+            Arc::clone(&gate_records),
         );
         for operation in story.operations {
             let operation_policy = manifest_operation(&story.manifest, operation)?;
-            let delegated = self.delegated_grants(&operation_policy.capability);
-            let before = gate_ledger.records()?.len();
+            let delegated = self.delegated_grants(&operation_policy.declaration.capability);
+            let before = gate_records.records()?.len();
             let outcome = fabric.realize(
                 cx,
-                request(operation, &operation_policy.effect, delegated.clone()),
+                request(
+                    operation,
+                    operation_policy.declaration.mode,
+                    delegated.clone(),
+                ),
             );
             let event = match outcome {
                 Ok(_) => {
@@ -300,10 +305,10 @@ impl ModeledWorkOrderEngine {
                         site: story.manifest.site.clone(),
                         operation: operation.to_owned(),
                         lane: operation_policy.lane.name,
-                        capability: operation_policy.capability,
-                        effect: operation_policy.effect.as_str().to_owned(),
+                        capability: operation_policy.declaration.capability.clone(),
+                        effect: mode_name(operation_policy.declaration.mode).to_owned(),
                         outcome: "accepted".to_owned(),
-                        note: gate_note(&gate_ledger, before)?,
+                        note: gate_note(&gate_records, before)?,
                         delegated_capabilities: delegated,
                     })
                 }
@@ -312,8 +317,8 @@ impl ModeledWorkOrderEngine {
                         site: story.manifest.site.clone(),
                         operation: operation.to_owned(),
                         lane: operation_policy.lane.name,
-                        capability: operation_policy.capability,
-                        effect: operation_policy.effect.as_str().to_owned(),
+                        capability: operation_policy.declaration.capability.clone(),
+                        effect: mode_name(operation_policy.declaration.mode).to_owned(),
                         outcome: "denied".to_owned(),
                         note: format!("denied missing {}", capability.as_str()),
                         delegated_capabilities: delegated,
@@ -328,8 +333,8 @@ impl ModeledWorkOrderEngine {
                         site: story.manifest.site.clone(),
                         operation: operation.to_owned(),
                         lane: operation_policy.lane.name,
-                        capability: operation_policy.capability,
-                        effect: operation_policy.effect.as_str().to_owned(),
+                        capability: operation_policy.declaration.capability.clone(),
+                        effect: mode_name(operation_policy.declaration.mode).to_owned(),
                         outcome: "failed".to_owned(),
                         note: err.to_string(),
                         delegated_capabilities: delegated,
@@ -413,10 +418,10 @@ fn all_cassettes() -> Vec<sim_lib_auto_vendor::ModeledVendorCassette> {
 
 fn request(
     operation: &str,
-    effect: &VendorEffectClass,
+    mode: ExecutionMode,
     required_capabilities: Vec<CapabilityName>,
 ) -> EvalRequest {
-    let expr = if *effect == VendorEffectClass::Irreversible {
+    let expr = if mode == ExecutionMode::Reviewed {
         vendor_irreversible_request_expr(
             operation,
             story_args(),
@@ -467,12 +472,20 @@ fn string_field(name: &str, value: &str) -> (Expr, Expr) {
     )
 }
 
-fn gate_note(ledger: &VendorGateLedger, before: usize) -> Result<String> {
+fn gate_note(ledger: &AutomotiveGateRecords, before: usize) -> Result<String> {
     let records = ledger.records()?;
     if records.len() > before {
         Ok(format!("vendor gate recorded {}", records.len() - before))
     } else {
         Ok("pure manifest reply".to_owned())
+    }
+}
+
+fn mode_name(mode: ExecutionMode) -> &'static str {
+    match mode {
+        ExecutionMode::Observation => "observation",
+        ExecutionMode::Recorded => "recorded",
+        ExecutionMode::Reviewed => "reviewed",
     }
 }
 
@@ -575,5 +588,52 @@ fn full_modeled_work_order_replays_all_vendor_sites() {
     );
     assert!(report.work_order.invoice.as_ref().unwrap().is_balanced());
     assert!(report.delegation_violations.is_empty());
+}
+```
+
+### `feature/sim-auto/guarded-vendor-operations`
+
+Specimen `spec-test/sim-auto/crates/sim-lib-auto-vendor/src/gate_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-auto-vendor/src/gate_tests.rs`:
+
+```rust
+// conformance: vendor operations cross only the generic reviewed operation gate.
+
+use std::sync::Arc;
+
+use sim_kernel::{CapabilityName, Expr};
+use sim_lib_operation_gate::ExecutionMode;
+
+use crate::test_support::{cx_with, request};
+use crate::{ModeledVendorBridge, cassette_vendor_fabric, mekonomen_pro_manifest, vendor_cassette};
+
+#[test]
+fn manifest_policy_is_explicit_and_public_replay_dispatches_once() {
+    let manifest = mekonomen_pro_manifest();
+    let operation = crate::manifest_operation(&manifest, "order/place").unwrap();
+    assert_eq!(operation.declaration.mode, ExecutionMode::Recorded);
+    assert_eq!(
+        operation.declaration.capability,
+        CapabilityName::new("auto/order")
+    );
+
+    let bridge = Arc::new(ModeledVendorBridge::new());
+    let fabric = cassette_vendor_fabric(manifest, bridge.clone(), vendor_cassette());
+    let request = request(
+        Expr::Map(vec![
+            (
+                Expr::String("op".into()),
+                Expr::String("order/place".into()),
+            ),
+            (Expr::String("args".into()), Expr::Map(Vec::new())),
+        ]),
+        &["auto/order"],
+    );
+    let mut cx = cx_with(&["auto/order"]);
+    let first = sim_kernel::EvalFabric::realize(&fabric, &mut cx, request.clone()).unwrap();
+    let second = sim_kernel::EvalFabric::realize(&fabric, &mut cx, request).unwrap();
+    assert_eq!(first.value, second.value);
+    assert_eq!(bridge.calls().unwrap().len(), 1);
 }
 ```

@@ -8,7 +8,7 @@ description = "Shared support for runnable sim-auto recipes."
 publish = false
 
 [dependencies]
-sim-kernel = "0.2.0"
+sim-kernel = "0.3.0"
 sim-lib-auto-core = { path = "../../crates/sim-lib-auto-core" }
 sim-lib-auto-order = { path = "../../crates/sim-lib-auto-order" }
 

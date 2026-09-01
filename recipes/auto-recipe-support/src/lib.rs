@@ -89,7 +89,11 @@ pub fn assert_site(site: &str) -> Result<String> {
 }
 
 fn modeled_report() -> Result<ConformanceReport> {
-    let (mut cx, seat) = Cx::new_seated(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory));
+    let (mut cx, seat) = Cx::new_seated(
+        Arc::new(NoopEvalPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x3c43_5e83_e98b_8ea2),
+    );
     seat.grant(&mut cx, CapabilityName::new(AUTO_DIAGNOSTICS_READ))?;
     seat.grant(&mut cx, CapabilityName::new(AUTO_ORDER))?;
     run_modeled_conformance(&mut cx)

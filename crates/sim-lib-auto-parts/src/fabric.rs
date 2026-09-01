@@ -6,7 +6,7 @@ use sim_kernel::{
     CORE_LOCAL_EVAL_FABRIC_CLASS_ID, ClassRef, Consistency, Cx, Error, EvalFabric, EvalMode,
     EvalReply, EvalRequest, Object, ObjectCompat, Result, Symbol,
 };
-use sim_lib_auto_vendor::VendorGateLedger;
+use sim_lib_auto_vendor::AutomotiveGateRecords;
 
 use crate::{
     ModeledOrderLedger, PartsDir, PartsRequest, modeled_epc_dir, parse_parts_request,
@@ -23,7 +23,7 @@ use crate::{
 pub struct AutoPartsFabric {
     catalog: PartsDir,
     order_ledger: Arc<ModeledOrderLedger>,
-    gate_ledger: Arc<VendorGateLedger>,
+    gate_records: Arc<AutomotiveGateRecords>,
 }
 
 impl AutoPartsFabric {
@@ -31,12 +31,12 @@ impl AutoPartsFabric {
     pub fn new(
         catalog: PartsDir,
         order_ledger: Arc<ModeledOrderLedger>,
-        gate_ledger: Arc<VendorGateLedger>,
+        gate_records: Arc<AutomotiveGateRecords>,
     ) -> Self {
         Self {
             catalog,
             order_ledger,
-            gate_ledger,
+            gate_records,
         }
     }
 
@@ -45,7 +45,7 @@ impl AutoPartsFabric {
         Self::new(
             modeled_epc_dir(),
             Arc::new(ModeledOrderLedger::new()),
-            Arc::new(VendorGateLedger::new()),
+            Arc::new(AutomotiveGateRecords::new()),
         )
     }
 
@@ -55,8 +55,8 @@ impl AutoPartsFabric {
     }
 
     /// Returns the vendor gate ledger.
-    pub fn gate_ledger(&self) -> &Arc<VendorGateLedger> {
-        &self.gate_ledger
+    pub fn gate_records(&self) -> &Arc<AutomotiveGateRecords> {
+        &self.gate_records
     }
 }
 
@@ -73,7 +73,7 @@ impl EvalFabric for AutoPartsFabric {
                 supplier,
                 lines,
                 self.order_ledger.as_ref(),
-                self.gate_ledger.as_ref(),
+                self.gate_records.as_ref(),
             )?
             .to_expr(),
         };

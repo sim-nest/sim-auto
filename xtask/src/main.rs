@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 
 mod file_sizes;
+mod host_blind;
 mod simdoc;
 
 fn main() {
@@ -15,6 +16,7 @@ fn run(args: Vec<String>) -> Result<(), String> {
     match args.get(1).map(String::as_str) {
         Some("simdoc") => simdoc::run(args),
         Some("check-file-sizes") => file_sizes::run(),
+        Some("check-host-blind") => host_blind::run(),
         _ => Err(format!(
             "usage: {program} <simdoc [--check]|check-file-sizes>"
         )),

@@ -2,7 +2,7 @@
 //!
 //! The crate turns [`SiteManifest`] values into loadable kernel site exports.
 //! Every site dispatches through one [`VendorBridge`] trait and the
-//! [`warranted_effect`] gate, keeping concrete vendor behavior outside the
+//! generic operation gate, keeping concrete vendor behavior outside the
 //! kernel and outside this public crate.
 //!
 //! [`SiteManifest`]: sim_lib_auto_core::SiteManifest
@@ -19,18 +19,14 @@ mod runtime;
 mod sites;
 
 #[cfg(test)]
-mod flash_tests;
-#[cfg(test)]
-mod supplier_tests;
+mod gate_tests;
 #[cfg(test)]
 mod test_support;
-#[cfg(test)]
-mod tests;
 
 pub use bridge::{ModeledVendorBridge, ModeledVendorCassette, VendorBridge};
-pub use effect::{ManifestOperation, VendorEffectClass, manifest_operation};
+pub use effect::{ManifestOperation, manifest_operation};
 pub use engine::{VendorReplayFabric, VendorSiteFabric, cassette_vendor_fabric, vendor_cassette};
-pub use gate::{VendorGateLedger, VendorGateRecord, VendorWarrant, warranted_effect};
+pub use gate::{AutomotiveApprovalUse, AutomotiveGateRecords, guard_vendor_operation};
 pub use request::{VendorBridgeRequest, vendor_irreversible_request_expr, vendor_request_expr};
 pub use runtime::{AutoVendorLib, auto_vendor_site_symbol, install_auto_vendor_lib};
 pub use sites::{

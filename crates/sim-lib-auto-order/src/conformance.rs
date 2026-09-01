@@ -10,12 +10,13 @@ use sim_lib_auto_core::{
 };
 use sim_lib_auto_parts::{OrderStatus, Supplier};
 use sim_lib_auto_vendor::{
-    ModeledVendorBridge, VendorEffectClass, VendorGateLedger, VendorSiteFabric, autotuner_manifest,
+    AutomotiveGateRecords, ModeledVendorBridge, VendorSiteFabric, autotuner_manifest,
     biluppgifter_se_manifest, esitronic_manifest, flash_site_cassettes, haynespro_manifest,
     ista_manifest, manifest_operation, mekonomen_pro_manifest, odis_manifest, oem_site_cassettes,
     supplier_site_cassettes, vendor_irreversible_request_expr, vendor_request_expr, vida_manifest,
     xentry_manifest,
 };
+use sim_lib_operation_gate::ExecutionMode;
 
 use crate::{
     ConformanceReport, LedgerInvoiceExport, WorkOrder, WorkOrderEvent, model::WorkOrderEventInput,
@@ -124,19 +125,23 @@ impl ModeledWorkOrderEngine {
         delegation_violations: &mut Vec<String>,
     ) -> Result<()> {
         let bridge = Arc::new(ModeledVendorBridge::with_cassettes(all_cassettes()));
-        let gate_ledger = Arc::new(VendorGateLedger::new());
-        let fabric = VendorSiteFabric::with_gate_ledger(
+        let gate_records = Arc::new(AutomotiveGateRecords::new());
+        let fabric = VendorSiteFabric::with_gate_records(
             story.manifest.clone(),
             bridge,
-            Arc::clone(&gate_ledger),
+            Arc::clone(&gate_records),
         );
         for operation in story.operations {
             let operation_policy = manifest_operation(&story.manifest, operation)?;
-            let delegated = self.delegated_grants(&operation_policy.capability);
-            let before = gate_ledger.records()?.len();
+            let delegated = self.delegated_grants(&operation_policy.declaration.capability);
+            let before = gate_records.records()?.len();
             let outcome = fabric.realize(
                 cx,
-                request(operation, &operation_policy.effect, delegated.clone()),
+                request(
+                    operation,
+                    operation_policy.declaration.mode,
+                    delegated.clone(),
+                ),
             );
             let event = match outcome {
                 Ok(_) => {
@@ -156,10 +161,10 @@ impl ModeledWorkOrderEngine {
                         site: story.manifest.site.clone(),
                         operation: operation.to_owned(),
                         lane: operation_policy.lane.name,
-                        capability: operation_policy.capability,
-                        effect: operation_policy.effect.as_str().to_owned(),
+                        capability: operation_policy.declaration.capability.clone(),
+                        effect: mode_name(operation_policy.declaration.mode).to_owned(),
                         outcome: "accepted".to_owned(),
-                        note: gate_note(&gate_ledger, before)?,
+                        note: gate_note(&gate_records, before)?,
                         delegated_capabilities: delegated,
                     })
                 }
@@ -168,8 +173,8 @@ impl ModeledWorkOrderEngine {
                         site: story.manifest.site.clone(),
                         operation: operation.to_owned(),
                         lane: operation_policy.lane.name,
-                        capability: operation_policy.capability,
-                        effect: operation_policy.effect.as_str().to_owned(),
+                        capability: operation_policy.declaration.capability.clone(),
+                        effect: mode_name(operation_policy.declaration.mode).to_owned(),
                         outcome: "denied".to_owned(),
                         note: format!("denied missing {}", capability.as_str()),
                         delegated_capabilities: delegated,
@@ -184,8 +189,8 @@ impl ModeledWorkOrderEngine {
                         site: story.manifest.site.clone(),
                         operation: operation.to_owned(),
                         lane: operation_policy.lane.name,
-                        capability: operation_policy.capability,
-                        effect: operation_policy.effect.as_str().to_owned(),
+                        capability: operation_policy.declaration.capability.clone(),
+                        effect: mode_name(operation_policy.declaration.mode).to_owned(),
                         outcome: "failed".to_owned(),
                         note: err.to_string(),
                         delegated_capabilities: delegated,
@@ -269,10 +274,10 @@ fn all_cassettes() -> Vec<sim_lib_auto_vendor::ModeledVendorCassette> {
 
 fn request(
     operation: &str,
-    effect: &VendorEffectClass,
+    mode: ExecutionMode,
     required_capabilities: Vec<CapabilityName>,
 ) -> EvalRequest {
-    let expr = if *effect == VendorEffectClass::Irreversible {
+    let expr = if mode == ExecutionMode::Reviewed {
         vendor_irreversible_request_expr(
             operation,
             story_args(),
@@ -323,12 +328,20 @@ fn string_field(name: &str, value: &str) -> (Expr, Expr) {
     )
 }
 
-fn gate_note(ledger: &VendorGateLedger, before: usize) -> Result<String> {
+fn gate_note(ledger: &AutomotiveGateRecords, before: usize) -> Result<String> {
     let records = ledger.records()?;
     if records.len() > before {
         Ok(format!("vendor gate recorded {}", records.len() - before))
     } else {
         Ok("pure manifest reply".to_owned())
+    }
+}
+
+fn mode_name(mode: ExecutionMode) -> &'static str {
+    match mode {
+        ExecutionMode::Observation => "observation",
+        ExecutionMode::Recorded => "recorded",
+        ExecutionMode::Reviewed => "reviewed",
     }
 }
 

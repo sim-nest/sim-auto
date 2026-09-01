@@ -5,10 +5,11 @@
 the standard site registry, backed by one `VendorBridge` trait that can point at
 modeled data, a cassette, or a host bridge.
 
-Every operation reaches the bridge through `warranted_effect`. Pure reads use
-only the diagnostic-read capability. Reversible operations also record a gate
-and kernel effect-ledger entry. Irreversible operations additionally require a
-reversal artifact, a warrant, and explicit human approval before dispatch.
+Every operation reaches the domain-neutral `sim-lib-operation-gate` through an
+explicit `OpCap` declaration. Observation and Recorded modes are distinct audit
+labels; Reviewed operations require verified exact-subject approval whose
+atomic use occurs inside the first-performance boundary. Kernel cassette replay
+returns the recorded `Ref` directly without dispatching or consuming twice.
 
 ## Validation
 

@@ -3,8 +3,11 @@
 use std::sync::{Mutex, MutexGuard};
 
 use sim_kernel::{CapabilityName, Cx, Error, Expr, Result, Symbol};
-use sim_lib_auto_core::{AUTO_ORDER, AutoLane, SiteManifest, VehicleId};
-use sim_lib_auto_vendor::{VendorBridge, VendorBridgeRequest, VendorGateLedger, warranted_effect};
+use sim_lib_auto_core::{AUTO_ORDER, AutoLane, OpCap, SiteManifest, VehicleId};
+use sim_lib_auto_vendor::{
+    AutomotiveApprovalUse, AutomotiveGateRecords, VendorBridge, VendorBridgeRequest,
+    guard_vendor_operation, manifest_operation,
+};
 
 use crate::{OrderStatus, PartLine, Supplier};
 
@@ -43,8 +46,8 @@ pub fn place_order(
     lines: Vec<PartLine>,
     ledger: &ModeledOrderLedger,
 ) -> Result<OrderStatus> {
-    let gate_ledger = VendorGateLedger::new();
-    place_order_with_gate(cx, supplier, lines, ledger, &gate_ledger)
+    let records = AutomotiveGateRecords::new();
+    place_order_with_gate(cx, supplier, lines, ledger, &records)
 }
 
 /// Places a parts order with an explicit vendor gate ledger.
@@ -53,7 +56,7 @@ pub fn place_order_with_gate(
     supplier: Supplier,
     lines: Vec<PartLine>,
     ledger: &ModeledOrderLedger,
-    gate_ledger: &VendorGateLedger,
+    records: &AutomotiveGateRecords,
 ) -> Result<OrderStatus> {
     validate_lines(&lines)?;
     let bridge = OrderBridge::new(supplier, lines.clone());
@@ -64,13 +67,14 @@ pub fn place_order_with_gate(
         VehicleId::new("fixture", "mekonomen-order"),
         order_args_expr(supplier, &lines),
     );
-    let required = required_capabilities(supplier);
-    warranted_effect(
+    cx.require_all(&required_capabilities(supplier))?;
+    let operation = manifest_operation(&mekonomen_order_manifest(), ORDER_OPERATION)?;
+    guard_vendor_operation(
         cx,
-        &mekonomen_order_manifest(),
-        request,
-        &required,
-        gate_ledger,
+        &request,
+        &operation,
+        records,
+        &AutomotiveApprovalUse::new(),
         &bridge,
     )?;
     let status = bridge.status()?.ok_or_else(|| {
@@ -90,6 +94,11 @@ pub fn mekonomen_order_manifest() -> SiteManifest {
         vec!["modeled".to_owned(), "http-dir".to_owned()],
         vec![ORDER_OPERATION.to_owned()],
     )
+    .with_op_caps(vec![OpCap::new(
+        ORDER_OPERATION,
+        CapabilityName::new(AUTO_ORDER),
+        "recorded",
+    )])
 }
 
 fn required_capabilities(supplier: Supplier) -> Vec<CapabilityName> {

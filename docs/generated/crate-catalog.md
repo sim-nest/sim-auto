@@ -6,7 +6,7 @@ Generated from Cargo metadata by `xtask crate-catalog v1`.
 
 | Package | Publish | Targets | Description |
 | --- | --- | --- | --- |
-| `sim-auto` | `true` | `bin, lib` | Bootloader-backed automotive bay command surface for SIM. |
+| `sim-auto` | `true` | `lib` | Bootloader-backed automotive bay command surface for SIM. |
 | `sim-codec-uds` | `true` | `custom-build, lib` | UDS and OBD-II byte-frame codec for SIM automotive diagnostics. |
 | `sim-lib-auto-core` | `true` | `lib, test` | Automotive domain citizens and capability manifests for SIM. |
 | `sim-lib-auto-diag` | `true` | `custom-build, lib` | Modeled automotive diagnostic fabric for SIM. |

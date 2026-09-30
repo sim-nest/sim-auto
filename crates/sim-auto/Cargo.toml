@@ -1,6 +1,6 @@
 [package]
 name = "sim-auto"
-version = "0.2.3"
+version = "0.2.4"
 edition = "2024"
 license = "MPL-2.0"
 description = "Bootloader-backed automotive bay command surface for SIM."
@@ -10,7 +10,7 @@ repository = "https://github.com/sim-nest/sim-auto"
 homepage = "https://github.com/sim-nest/sim-auto"
 
 [dependencies]
-sim-codec-lisp = { version = "0.4.0" }
+sim-codec-lisp = { version = "0.4.1" }
 sim-kernel = { version = "0.4.0" }
 sim-lib-view-bay = { version = "0.4.0", path = "../sim-lib-view-bay" }
 sim-run-core = { version = "0.5.0" }

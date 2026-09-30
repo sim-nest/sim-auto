@@ -10,7 +10,7 @@ publish = false
 [dependencies]
 sim-kernel = "0.4.0"
 sim-lib-auto-core = { path = "../../crates/sim-lib-auto-core" }
-sim-lib-auto-order = { path = "../../crates/sim-lib-auto-order" }
+sim-lib-auto-order = { version = "0.1.3", path = "../../crates/sim-lib-auto-order" }
 
 [lints]
 workspace = true
